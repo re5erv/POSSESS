@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://b1owp87nwry03"]
+
+[ext_resource type="Script" uid="uid://bvja84f82vprk" path="res://scripts/specimen.gd" id="1_s1rbj"]
+[ext_resource type="Texture2D" uid="uid://0omen57b7x7u" path="res://textures/specimen.png" id="2_7aei6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_inf8p"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pngcy"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(0, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qed6e"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bhunq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_inf8p")
+}],
+"loop": 1,
+"name": &"Larp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_inf8p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pngcy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qed6e")
+}],
+"loop": 2,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[node name="Specimen" type="CharacterBody2D" unique_id=37663945]
+script = ExtResource("1_s1rbj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1144493393]
+sprite_frames = SubResource("SpriteFrames_bhunq")
+animation = &"Walk"
+frame_progress = 0.5373715
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=486865406]
+zoom = Vector2(5, 5)
+limit_enabled = false
+editor_draw_drag_margin = true
