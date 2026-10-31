@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cfgrxohyn7rfh"]
+
+[ext_resource type="Texture2D" uid="uid://dd3bjctpt4ur5" path="res://textures/basetexs/axe.png" id="1_yoh3g"]
+[ext_resource type="Script" uid="uid://2sxmayde2uup" path="res://scripts/axepick.gd" id="2_gmof6"]
+
+[node name="Axe" type="Sprite2D" unique_id=440802718]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("1_yoh3g")
+script = ExtResource("2_gmof6")

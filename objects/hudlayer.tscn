@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://f0es2bbvavqt"]
+
+[ext_resource type="PackedScene" uid="uid://dsxg7i02bycci" path="res://scenes/ui/HUD.tscn" id="1_cclyj"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=2061645113]
+
+[node name="Control" parent="." unique_id=1331306042 instance=ExtResource("1_cclyj")]
+offset_left = 1.0
+offset_right = 1.0

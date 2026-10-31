@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://crl5pf1wbwstq"]
+
+[ext_resource type="Texture2D" uid="uid://bxs3sei1fgeq3" path="res://textures/Liner.png" id="1_cvmpf"]
+
+[node name="Sprite2D" type="Sprite2D" unique_id=1298564898]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_cvmpf")

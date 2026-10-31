@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c2ebruaeggoiu"]
+
+[ext_resource type="Script" uid="uid://c1rc6nkbd7xkg" path="res://scripts/bullets.gd" id="1_d4b24"]
+[ext_resource type="Texture2D" uid="uid://cqp1rwsp50v3t" path="res://textures/Bullet.png" id="2_k3s4m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bhunq"]
+size = Vector2(2, 2.1666665)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_riqys"]
+size = Vector2(1.6666667, 2.0833335)
+
+[node name="Bullet" type="CharacterBody2D" unique_id=496615419]
+collision_mask = 3
+script = ExtResource("1_d4b24")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=648717975]
+z_index = 1
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_k3s4m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1062193998]
+scale = Vector2(0.3, 0.3)
+shape = SubResource("RectangleShape2D_bhunq")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1881989845]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=158071724]
+scale = Vector2(0.3, 0.3)
+shape = SubResource("RectangleShape2D_riqys")

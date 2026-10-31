@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dpqxucqpvd1g1"]
+
+[ext_resource type="Texture2D" uid="uid://ds6mwf0ir3ej" path="res://textures/basetexs/BasWar.png" id="1_ojmax"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n025d"]
+atlas = ExtResource("1_ojmax")
+region = Rect2(0, 60, 30, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c7nd5"]
+atlas = ExtResource("1_ojmax")
+region = Rect2(0, 30, 30, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2x4gu"]
+atlas = ExtResource("1_ojmax")
+region = Rect2(0, 90, 30, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nt1wv"]
+atlas = ExtResource("1_ojmax")
+region = Rect2(0, 0, 30, 30)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n025d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c7nd5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2x4gu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nt1wv")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,0 +1,219 @@
+[gd_scene format=3 uid="uid://dsxg7i02bycci"]
+
+[ext_resource type="Script" uid="uid://o5x2futfiuj5" path="res://scripts/hud.gd" id="1_jlufg"]
+
+[node name="Control" type="Control" unique_id=1331306042]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jlufg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=32403797]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 35.0
+offset_top = -123.0
+offset_right = 148.0
+offset_bottom = -19.0
+grow_vertical = 0
+
+[node name="HL" type="Label" parent="VBoxContainer" unique_id=1987442821]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = "Health"
+uppercase = true
+
+[node name="FL" type="Label" parent="VBoxContainer" unique_id=1816207503]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.050980393, 1, 0.06666667, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = "Food"
+uppercase = true
+
+[node name="ML" type="Label" parent="VBoxContainer" unique_id=862629103]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = "MoneYs"
+uppercase = true
+
+[node name="BL" type="Label" parent="VBoxContainer" unique_id=650357668]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3529412, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = "Bullets"
+uppercase = true
+
+[node name="ItemName" type="VBoxContainer" parent="." unique_id=1392178635]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -56.5
+offset_top = -58.0
+offset_right = 56.5
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Name" type="Label" parent="ItemName" unique_id=1953915843]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7294118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "Uzi"
+horizontal_alignment = 1
+
+[node name="Bullets" type="Label" parent="ItemName" unique_id=52153585]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7294118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "0/0"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="ItemName" unique_id=670611543]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7294118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 11
+text = "Good choise"
+horizontal_alignment = 1
+
+[node name="Time" type="VBoxContainer" parent="." unique_id=832395240]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -56.5
+offset_top = -635.0
+offset_right = 56.5
+offset_bottom = -531.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TimeL" type="Label" parent="Time" unique_id=1752921818]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7294118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 30
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=781865350]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 148.0
+offset_top = -123.0
+offset_right = 220.0
+offset_bottom = -19.0
+grow_vertical = 0
+
+[node name="Hnumb" type="Label" parent="VBoxContainer3" unique_id=325413418]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = ": 100"
+uppercase = true
+
+[node name="Fnumb" type="Label" parent="VBoxContainer3" unique_id=47475820]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.050980393, 1, 0.06666667, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = ": 100"
+uppercase = true
+
+[node name="Mnumb" type="Label" parent="VBoxContainer3" unique_id=1134861757]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = ": 0"
+uppercase = true
+
+[node name="Bnumb" type="Label" parent="VBoxContainer3" unique_id=335991156]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3529412, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 25
+text = ": 0"
+uppercase = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1191980641]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -205.0
+offset_right = 59.0
+offset_bottom = -101.0
+grow_vertical = 0
+
+[node name="Health" parent="VBoxContainer2" unique_id=1316753688]
+position = Vector2(12, 92)
+scale = Vector2(0.8, 0.8)
+frame_progress = 0.5783932
+
+[node name="Food" parent="VBoxContainer2" unique_id=194478793]
+position = Vector2(12, 116.99999)
+scale = Vector2(0.8, 0.8)
+frame_progress = 0.565814
+
+[node name="Money" parent="VBoxContainer2" unique_id=1672465517]
+position = Vector2(12, 144)
+scale = Vector2(0.8, 0.8)
+frame_progress = 0.27371052
+
+[node name="Bullet" parent="VBoxContainer2" unique_id=728741083]
+position = Vector2(12, 169)
+scale = Vector2(0.8, 0.8)
+frame_progress = 0.7039075
+
+[node name="WeaponContainer" type="VBoxContainer" parent="." unique_id=1309731318]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -109.0
+offset_right = 20.0
+offset_bottom = -69.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="WeaponIcon" type="Sprite2D" parent="WeaponContainer" unique_id=1161724052]
+position = Vector2(20, 15)

@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://eiielvdto3wr"]
+
+[ext_resource type="Texture2D" uid="uid://bs2yl3rv6yjn6" path="res://textures/basetexs/BarWar.png" id="1_1yj8f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlx0n"]
+atlas = ExtResource("1_1yj8f")
+region = Rect2(0, 120, 30, 30)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vlx0n")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]

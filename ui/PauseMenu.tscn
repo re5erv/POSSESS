@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://da4ho1qscraa3"]
+
+[ext_resource type="FontFile" uid="uid://4pg72bpn401j" path="res://textures/font/BustlePixel.ttf" id="1_7ida2"]
+[ext_resource type="Script" uid="uid://dolgggnu6aevx" path="res://scripts/pause_menu.gd" id="1_n5dsq"]
+[ext_resource type="Theme" uid="uid://cnjnj6mkyxxhv" path="res://SpriteFrames/new_theme.tres" id="2_n5dsq"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=631655495]
+script = ExtResource("1_n5dsq")
+
+[node name="Control" type="Control" parent="." unique_id=1146913760]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=1339033440]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2901961, 0.2901961, 0.2901961, 0.25882354)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1751603350]
+layout_mode = 0
+offset_left = 482.0
+offset_top = 267.0
+offset_right = 670.0
+offset_bottom = 381.0
+
+[node name="FinalMud" type="Label" parent="Control/VBoxContainer" unique_id=315235993]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_7ida2")
+theme_override_font_sizes/font_size = 35
+text = "PAUSE"
+horizontal_alignment = 1
+
+[node name="Play" type="Button" parent="Control/VBoxContainer" unique_id=1429044851]
+process_mode = 3
+layout_mode = 2
+theme = ExtResource("2_n5dsq")
+theme_override_colors/font_color = Color(0.4392157, 0.4745098, 0.043137256, 1)
+theme_override_colors/font_focus_color = Color(0.22352941, 0.34117648, 0.105882354, 1)
+theme_override_colors/font_pressed_color = Color(0.31764707, 0.3372549, 0, 1)
+theme_override_colors/font_hover_color = Color(0.14509805, 0.24705882, 0.0627451, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("1_7ida2")
+theme_override_font_sizes/font_size = 35
+text = "CONTINUE"
+
+[node name="Menu" type="Button" parent="Control/VBoxContainer" unique_id=2026610147]
+process_mode = 3
+layout_mode = 2
+theme = ExtResource("2_n5dsq")
+theme_override_colors/font_color = Color(0.4392157, 0.4745098, 0.043137256, 1)
+theme_override_colors/font_focus_color = Color(0.22352941, 0.34117648, 0.105882354, 1)
+theme_override_colors/font_pressed_color = Color(0.31764707, 0.3372549, 0, 1)
+theme_override_colors/font_hover_color = Color(0.14509805, 0.24705882, 0.0627451, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("1_7ida2")
+theme_override_font_sizes/font_size = 35
+text = "Main Menu"

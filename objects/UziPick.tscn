@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dtknfm8d5jxjr"]
+
+[ext_resource type="Texture2D" uid="uid://h4xtps8hi36l" path="res://textures/KHCinder.png" id="1_ghqsi"]
+[ext_resource type="Script" uid="uid://81ycvm2xcsrk" path="res://scripts/uzipick.gd" id="2_lsxj3"]
+[ext_resource type="Script" uid="uid://bd3s4nay21o47" path="res://scripts/DataGun.gd" id="3_73n8k"]
+
+[node name="Uzi" type="Sprite2D" unique_id=440802718]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("1_ghqsi")
+script = ExtResource("2_lsxj3")
+
+[node name="DataGunNode" type="Node" parent="." unique_id=1158814769]
+script = ExtResource("3_73n8k")
+in_mag_max = 32
