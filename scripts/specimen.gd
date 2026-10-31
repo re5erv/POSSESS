@@ -3,12 +3,14 @@ extends CharacterBody2D
 @export var move_speed = 150.0
 @export var jump_scale = 1.5 
 @export var jump_duration = 0.8 
+@export var jump_distance = 200.0 # Как далеко прыгает (в пикселях)
 
 @onready var sprite = $AnimatedSprite2D
 
 var is_jumping = false
 var jump_timer = 0.0
 var jump_target = null 
+var jump_direction = Vector2.ZERO
 
 # Эти переменные нужны, чтобы люди (в группе "human") могли корректно его обрабатывать
 var is_possessed = false
@@ -24,48 +26,57 @@ func _ready():
 func _process(_delta):
 	if dead: return
 	
-	# 1. ПОВОРОТ ЗА МЫШЬЮ
+	# ПОВОРОТ ЗА МЫШЬЮ
 	var mouse_angle = global_position.direction_to(get_global_mouse_position()).angle()
 	rotation = mouse_angle + PI/2.0 
 	
-	# 2. ЛОГИКА ПРЫЖКА (Парение)
+	# ЛОГИКА ПРЫЖКА (Парение)
 	if is_jumping:
 		jump_timer += _delta
 		var progress = jump_timer / jump_duration
 		
+		# Плавное изменение масштаба (горб)
 		var flight_curve = sin(progress * PI)
 		var current_scale = 1.0 + (jump_scale - 1.0) * flight_curve
 		scale = Vector2(current_scale, current_scale)
 		
+		# Движение вперед во время прыжка
+		global_position += jump_direction * (jump_distance / jump_duration) * _delta
+		
+		# ПРОВЕРКА НА ВСЕЛЕНИЕ В ПОЛЕТЕ
+		if jump_target and is_instance_valid(jump_target):
+			# Если мы подлетели достаточно близко к цели
+			if global_position.distance_to(jump_target.global_position) < 30.0:
+				possess_target(jump_target)
+				return
+		
+		# Если время вышло — заканчиваем прыжок
 		if progress >= 1.0:
 			is_jumping = false
 			scale = Vector2.ONE
 			
-			# ПРИЗЕМЛЕНИЕ: проверяем, на кого прыгнули
-			if jump_target and is_instance_valid(jump_target):
-				possess_target(jump_target)
-			else:
-				if sprite:
-					sprite.play("Larp")
+			# Если приземлились, но никого не нашли
+			if sprite:
+				sprite.play("Larp")
 
 func _physics_process(_delta):
-	if dead: return
+	if dead or is_jumping: return # Во время прыжка физика отключается
 	
-	# 1. ДВИЖЕНИЕ
+	# ДВИЖЕНИЕ
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	if input_dir.length() > 0.1:
 		velocity = input_dir * move_speed
 		move_and_slide()
 		
-		if sprite and sprite.animation != "Walk" and sprite.animation != "Jump":
+		if sprite and sprite.animation != "Walk":
 			sprite.play("Walk")
 	else:
 		velocity = Vector2.ZERO
-		if sprite and sprite.animation != "Larp" and sprite.animation != "Jump":
+		if sprite and sprite.animation != "Larp":
 			sprite.play("Larp")
 			
-	# 2. НАЖАТИЕ НА ПРЫЖОК
+	# НАЖАТИЕ НА ПРЫЖОК (ПКМ)
 	if InputMap.has_action("jump") and Input.is_action_just_pressed("jump") and not is_jumping:
 		start_jump()
 
@@ -74,21 +85,28 @@ func start_jump():
 	jump_timer = 0.0
 	jump_target = null 
 	
-	# Ищем ближайшего Human в радиусе (например, 60 пикселей)
-	var nearest_human = null
-	var min_dist = 60.0 
+	# Направление прыжка — туда, куда смотрит мышь
+	var mouse_pos = get_global_mouse_position()
+	jump_direction = (mouse_pos - global_position).normalized()
 	
-	for human in get_tree().get_nodes_in_group("human"):
-		# Проверяем, что он не мертв и в него еще не вселились
+	# Ищем ближайшего Human в секторе прыжка
+	var humans = get_tree().get_nodes_in_group("human")
+	var min_dist = jump_distance + 50.0 # Ищем чуть дальше, чем длина прыжка
+	
+	for human in humans:
 		if human.dead or human.is_possessed: 
 			continue
 			
 		var dist = global_position.distance_to(human.global_position)
 		if dist < min_dist:
-			min_dist = dist
-			nearest_human = human
-	
-	jump_target = nearest_human
+			# Проверяем, находится ли он в направлении прыжка (примерно)
+			var dir_to_human = (human.global_position - global_position).normalized()
+			var dot = jump_direction.dot(dir_to_human)
+			
+			# Если угол меньше 45 градусов (dot > 0.7)
+			if dot > 0.7:
+				min_dist = dist
+				jump_target = human
 	
 	if sprite:
 		sprite.play("Jump")
@@ -99,12 +117,3 @@ func possess_target(target):
 	
 	# Удаляем прыгуна (слизь) с карты
 	queue_free()
-
-# --- Функция для получения урона (если люди попадут) ---
-#func take_damage(dmg):
-	#if dead: return
-	# У слизи нет здоровья, поэтому просто игнорируем или удаляем
-	#print("Слизень получил урон, но выжил (или умри, если нужно)")
-	# Если хочешь, чтобы слизень умирал:
-	# dead = true
-	# queue_free()
