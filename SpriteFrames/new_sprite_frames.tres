@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" format=3 uid="uid://dpqxucqpvd1g1"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://ucdab0jnnqom"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n025d"]
 region = Rect2(0, 60, 30, 30)

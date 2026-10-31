@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://da4ho1qscraa3"]
 
 [ext_resource type="FontFile" uid="uid://4pg72bpn401j" path="res://textures/font/BustlePixel.ttf" id="1_7ida2"]
-[ext_resource type="Script" uid="uid://dolgggnu6aevx" path="res://scripts/pause_menu.gd" id="1_n5dsq"]
+[ext_resource type="Script" uid="uid://dsl6kixqmkprd" path="res://scripts/pause_menu.gd" id="1_n5dsq"]
 [ext_resource type="Theme" uid="uid://cnjnj6mkyxxhv" path="res://SpriteFrames/new_theme.tres" id="2_n5dsq"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=631655495]

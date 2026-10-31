@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://ilmv0r63vqo6"]
+
+[ext_resource type="Script" uid="uid://divanfvreq42q" path="res://scripts/SettingsMenu.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="panel"]
+content_margin_left = 32.0
+content_margin_top = 24.0
+content_margin_right = 32.0
+content_margin_bottom = 24.0
+bg_color = Color(0.06666667, 0.023529412, 0.023529412, 0.98)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.7529412, 0.11764706, 0.101960786, 1)
+
+[node name="SettingsMenu" type="CanvasLayer" unique_id=670994761]
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=52927393]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0, 0, 0.72)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1214496157]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 81.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="Window" type="PanelContainer" parent="Center" unique_id=602263223]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_styles/panel = SubResource("panel")
+
+[node name="Content" type="VBoxContainer" parent="Center/Window" unique_id=1587594346]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/Window/Content" unique_id=466508417]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.18431373, 0.14117648, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
+text = "НАСТРОЙКИ"
+horizontal_alignment = 1
+
+[node name="MasterLabel" type="Label" parent="Center/Window/Content" unique_id=983385109]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Общая громкость"
+
+[node name="MasterRow" type="HBoxContainer" parent="Center/Window/Content" unique_id=1525987708]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="MasterSlider" type="HSlider" parent="Center/Window/Content/MasterRow" unique_id=1424005551]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="MasterValue" type="Label" parent="Center/Window/Content/MasterRow" unique_id=1981988887]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MusicLabel" type="Label" parent="Center/Window/Content" unique_id=1533229089]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Музыка"
+
+[node name="MusicRow" type="HBoxContainer" parent="Center/Window/Content" unique_id=1023310974]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="MusicSlider" type="HSlider" parent="Center/Window/Content/MusicRow" unique_id=859703823]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="MusicValue" type="Label" parent="Center/Window/Content/MusicRow" unique_id=350064119]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SfxLabel" type="Label" parent="Center/Window/Content" unique_id=1159498183]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Звуки"
+
+[node name="SfxRow" type="HBoxContainer" parent="Center/Window/Content" unique_id=570407623]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SfxSlider" type="HSlider" parent="Center/Window/Content/SfxRow" unique_id=556684648]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SfxValue" type="Label" parent="Center/Window/Content/SfxRow" unique_id=26632992]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="FullscreenRow" type="HBoxContainer" parent="Center/Window/Content" unique_id=1126208267]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="FullscreenLabel" type="Label" parent="Center/Window/Content/FullscreenRow" unique_id=1272264430]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Полный экран"
+vertical_alignment = 1
+
+[node name="FullscreenCheck" type="CheckButton" parent="Center/Window/Content/FullscreenRow" unique_id=1119673327]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Spacer" type="Control" parent="Center/Window/Content" unique_id=489406380]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="Center/Window/Content" unique_id=1307249770]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 26
+text = "НАЗАД"
