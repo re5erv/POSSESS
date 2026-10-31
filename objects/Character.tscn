@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ce3vurvbqegxw" path="res://textures/DeadRC.png" id="5_hcn2g"]
 [ext_resource type="Texture2D" uid="uid://dw8ufrt4dy585" path="res://textures/BarCivil.png" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://b5xe0ra4ddoa4" path="res://scripts/stats.gd" id="7_2rlf8"]
+[ext_resource type="Script" uid="uid://bd3s4nay21o47" path="res://scripts/DataGun.gd" id="7_4lryg"]
 [ext_resource type="Script" uid="uid://bnkqht1ultxi" path="res://scripts/holster.gd" id="9_dunks"]
 [ext_resource type="Texture2D" uid="uid://cpi1tbfcgeb81" path="res://textures/Holster.png" id="10_68atb"]
 
@@ -586,7 +587,7 @@ animations = [{
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_bhunq"]
 polygon = PackedVector2Array(-6, -4, 6, -4, 9, -1, 9, 3, 6, 6, -6, 6, -9, 3, -9, -1)
 
-[node name="Character" type="CharacterBody2D" unique_id=697022508 groups=["player"]]
+[node name="Character" type="CharacterBody2D" unique_id=697022508 groups=["human"]]
 z_index = 1
 collision_layer = 2
 collision_mask = 3
@@ -636,3 +637,9 @@ sdf_collision = false
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=137805907]
 target_position = Vector2(0, -250)
 collide_with_areas = true
+
+[node name="DataGun" type="Node" parent="." unique_id=1240429811]
+script = ExtResource("7_4lryg")
+gun_name = "Uzi"
+ammo_in_mag = 32
+in_mag_max = 32

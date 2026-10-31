@@ -91,7 +91,7 @@ animations = [{
 radius = 8.0
 height = 16.0
 
-[node name="Specimen" type="CharacterBody2D" unique_id=37663945]
+[node name="Specimen" type="CharacterBody2D" unique_id=37663945 groups=["enemies"]]
 script = ExtResource("1_s1rbj")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1144493393]

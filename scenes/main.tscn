@@ -9,13 +9,8 @@ load_path = "res://.godot/imported/Bullet.png-d9f8c21b65f26b1ee322c52c4e65ae64.c
 
 [node name="Main" type="Node2D" unique_id=1718836506]
 
-[node name="Character" parent="." unique_id=697022508 instance=ExtResource("1_o5qli")]
+[node name="Character" parent="." unique_id=697022508 groups=["human"] instance=ExtResource("1_o5qli")]
 position = Vector2(257, 70)
-is_possessed = true
-
-[node name="Soul" parent="Character" unique_id=100551520 instance=ExtResource("3_sugp2")]
-position = Vector2(-125, -14.000015)
-scale = Vector2(702.8819, -522.2905)
 
 [node name="Bullet" type="Sprite2D" parent="." unique_id=1043095067]
 modulate = Color(0.12591085, 0.12591085, 0.12591082, 1)
@@ -29,4 +24,8 @@ energy = 0.1
 shadow_enabled = true
 
 [node name="Specimen" parent="." unique_id=442031406 instance=ExtResource("2_sugp2")]
-position = Vector2(92, 53)
+position = Vector2(252, 166)
+
+[node name="Soul" parent="Specimen" unique_id=100551520 instance=ExtResource("3_sugp2")]
+position = Vector2(40, 2.9999847)
+scale = Vector2(702.8819, -522.2905)

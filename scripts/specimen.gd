@@ -1,19 +1,29 @@
 extends CharacterBody2D
 
 @export var move_speed = 150.0
-@export var jump_scale = 1.5 # Насколько слизь увеличивается в прыжке
-@export var jump_duration = 0.8 # Длительность прыжка (0.8 сек = плавное парение)
+@export var jump_scale = 1.5 
+@export var jump_duration = 0.8 
 
 @onready var sprite = $AnimatedSprite2D
 
 var is_jumping = false
 var jump_timer = 0.0
+var jump_target = null 
+
+# Эти переменные нужны, чтобы люди (в группе "human") могли корректно его обрабатывать
+var is_possessed = false
+var dead = false
 
 func _ready():
+	# Добавляем в группу врагов, чтобы люди видели его и стреляли
+	add_to_group("enemies")
+	
 	if sprite:
 		sprite.play("Larp")
 
 func _process(_delta):
+	if dead: return
+	
 	# 1. ПОВОРОТ ЗА МЫШЬЮ
 	var mouse_angle = global_position.direction_to(get_global_mouse_position()).angle()
 	rotation = mouse_angle + PI/2.0 
@@ -23,23 +33,24 @@ func _process(_delta):
 		jump_timer += _delta
 		var progress = jump_timer / jump_duration
 		
-		# Используем функцию smoothstep для более плавного парения (взлет и посадка)
-		# Вместо простого синуса мы берем "горб" (от 0 до 1 и обратно к 0)
 		var flight_curve = sin(progress * PI)
-		
-		# Применяем масштаб (плавно)
 		var current_scale = 1.0 + (jump_scale - 1.0) * flight_curve
 		scale = Vector2(current_scale, current_scale)
 		
-		# Если время вышло — заканчиваем прыжок
 		if progress >= 1.0:
 			is_jumping = false
-			scale = Vector2.ONE # Возвращаем исходный размер
-			# Возвращаем анимацию покоя
-			if sprite:
-				sprite.play("Larp")
+			scale = Vector2.ONE
+			
+			# ПРИЗЕМЛЕНИЕ: проверяем, на кого прыгнули
+			if jump_target and is_instance_valid(jump_target):
+				possess_target(jump_target)
+			else:
+				if sprite:
+					sprite.play("Larp")
 
 func _physics_process(_delta):
+	if dead: return
+	
 	# 1. ДВИЖЕНИЕ
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
@@ -47,12 +58,10 @@ func _physics_process(_delta):
 		velocity = input_dir * move_speed
 		move_and_slide()
 		
-		# Если мы в прыжке, не перебиваем анимацию Jump анимацией Walk
 		if sprite and sprite.animation != "Walk" and sprite.animation != "Jump":
 			sprite.play("Walk")
 	else:
 		velocity = Vector2.ZERO
-		# Если мы в прыжке, не перебиваем Jump анимацией Larp
 		if sprite and sprite.animation != "Larp" and sprite.animation != "Jump":
 			sprite.play("Larp")
 			
@@ -63,9 +72,39 @@ func _physics_process(_delta):
 func start_jump():
 	is_jumping = true
 	jump_timer = 0.0
+	jump_target = null 
 	
-	# Включаем анимацию прыжка
+	# Ищем ближайшего Human в радиусе (например, 60 пикселей)
+	var nearest_human = null
+	var min_dist = 60.0 
+	
+	for human in get_tree().get_nodes_in_group("human"):
+		# Проверяем, что он не мертв и в него еще не вселились
+		if human.dead or human.is_possessed: 
+			continue
+			
+		var dist = global_position.distance_to(human.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			nearest_human = human
+	
+	jump_target = nearest_human
+	
 	if sprite:
 		sprite.play("Jump")
+
+func possess_target(target):
+	# Вызываем у человека функцию вселения
+	target.possess()
 	
-	# Здесь в будущем можно добавить проверку, есть ли под нами враг, чтобы вселиться
+	# Удаляем прыгуна (слизь) с карты
+	queue_free()
+
+# --- Функция для получения урона (если люди попадут) ---
+#func take_damage(dmg):
+	#if dead: return
+	# У слизи нет здоровья, поэтому просто игнорируем или удаляем
+	#print("Слизень получил урон, но выжил (или умри, если нужно)")
+	# Если хочешь, чтобы слизень умирал:
+	# dead = true
+	# queue_free()
