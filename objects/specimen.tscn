@@ -3,6 +3,30 @@
 [ext_resource type="Script" uid="uid://bvja84f82vprk" path="res://scripts/specimen.gd" id="1_s1rbj"]
 [ext_resource type="Texture2D" uid="uid://0omen57b7x7u" path="res://textures/specimen.png" id="2_7aei6"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1rbj"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7aei6"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3njf2"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vw1ja"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y458w"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fmqa"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(24, 48, 24, 24)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_inf8p"]
 atlas = ExtResource("2_7aei6")
 region = Rect2(0, 0, 24, 24)
@@ -17,6 +41,29 @@ region = Rect2(0, 24, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bhunq"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s1rbj")
+}, {
+"duration": 0.9,
+"texture": SubResource("AtlasTexture_7aei6")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_3njf2")
+}, {
+"duration": 0.7,
+"texture": SubResource("AtlasTexture_vw1ja")
+}, {
+"duration": 0.9,
+"texture": SubResource("AtlasTexture_y458w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fmqa")
+}],
+"loop": 0,
+"name": &"Jump",
+"speed": 7.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_inf8p")
@@ -40,15 +87,17 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s1rbj"]
+radius = 8.0
+height = 16.0
+
 [node name="Specimen" type="CharacterBody2D" unique_id=37663945]
 script = ExtResource("1_s1rbj")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1144493393]
 sprite_frames = SubResource("SpriteFrames_bhunq")
-animation = &"Walk"
-frame_progress = 0.5373715
+animation = &"Jump"
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=486865406]
-zoom = Vector2(5, 5)
-limit_enabled = false
-editor_draw_drag_margin = true
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1628715499]
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_s1rbj")
