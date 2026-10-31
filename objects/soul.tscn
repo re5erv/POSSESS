@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d26w4lymt5t7p"]
+
+[ext_resource type="Script" uid="uid://dljhh4jrvb1nf" path="res://scripts/soul.gd" id="1_wkc2c"]
+
+[node name="Soul" type="Camera2D" unique_id=100551520]
+scale = Vector2(0.30147755, 0.30147755)
+zoom = Vector2(8, 8)
+script = ExtResource("1_wkc2c")

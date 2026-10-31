@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://daxs7ocu611eh"]
+
+[ext_resource type="PackedScene" uid="uid://cditcctgy00cd" path="res://objects/playerRC.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dtknfm8d5jxjr" path="res://objects/UziPick.tscn" id="3_jyhfs"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0wfyh"]
+load_path = "res://.godot/imported/Bullet.png-d9f8c21b65f26b1ee322c52c4e65ae64.ctex"
+
+[node name="Main" type="Node2D" unique_id=1718836506]
+
+[node name="Player" parent="." unique_id=697022508 instance=ExtResource("1_o5qli")]
+position = Vector2(257, 70)
+
+[node name="Bullet" type="Sprite2D" parent="." unique_id=1043095067]
+modulate = Color(0.12591085, 0.12591085, 0.12591082, 1)
+position = Vector2(413.00003, 86)
+scale = Vector2(5384.9883, 1411.8444)
+texture = SubResource("CompressedTexture2D_0wfyh")
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=752427625]
+position = Vector2(513, -218)
+energy = 0.1
+shadow_enabled = true
+
+[node name="Uzi" parent="." unique_id=440802718 instance=ExtResource("3_jyhfs")]
+position = Vector2(255, 38)
