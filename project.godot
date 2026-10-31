@@ -28,6 +28,16 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://Sounds/": "blue",
+"res://addons/": "purple",
+"res://objects/": "red",
+"res://scenes/": "green",
+"res://scripts/": "orange"
+}
+
 [global_group]
 
 human=""
