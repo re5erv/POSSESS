@@ -11,28 +11,25 @@ extends Control
 var time_passed: float = 0.0
 
 func _ready() -> void:
+	# Работаем даже на паузе
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	mouse_filter = Control.MOUSE_FILTER_IGNORE 
-	# Растягиваем на весь экран, чтобы координаты совпадали
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	size = get_viewport().get_visible_rect().size
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	show()
 
 func _process(delta: float) -> void:
 	time_passed += delta
 	
-	if get_tree().paused:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		modulate.a = 0.0
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		modulate.a = 1.0
-		
-		# Берем координаты мыши в экранном пространстве (Viewport)
-		global_position = get_viewport().get_mouse_position()
-		queue_redraw()
+	# СИСТЕМНУЮ МЫШЬ ПРЯЧЕМ ВСЕГДА
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
+	# Прицел всегда следует за мышкой
+	global_position = get_viewport().get_mouse_position()
+	queue_redraw()
 
 func _draw() -> void:
 	var center: Vector2 = Vector2.ZERO

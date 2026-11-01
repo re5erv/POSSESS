@@ -24,6 +24,7 @@ buses/default_bus_layout="uid://ehcpstq1vuyu"
 
 DialogueManager="*uid://c3rodes2l3gxb"
 Crosshair="*uid://b6xy5il3u3m7y"
+Shaderlayer="*uid://vunfck34m23w"
 
 [display]
 

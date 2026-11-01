@@ -401,5 +401,19 @@ func update_animations(move_input):
 		Legs_sprite.play(legs_anim)
 
 func pause_menu():
+	# Ставим игру на паузу
 	get_tree().paused = true
-	add_child(preload("res://scenes/SettingsMenu.tscn").instantiate())
+	
+	# Загружаем сцену меню
+	var pause_scene = preload("res://ui/PauseMenu.tscn")
+	var pause_ui = pause_scene.instantiate()
+	
+	# ВАЖНО: Добавляем в корень игры, а не к персонажу!
+	get_tree().root.add_child(pause_ui)
+	
+	# На всякий случай делаем его видимым (если в сцене стоит visible = false)
+	if pause_ui is CanvasLayer or pause_ui is Control:
+		pause_ui.visible = true
+		
+	# Включаем игнорирование паузы для самого меню, чтобы кнопки работали
+	pause_ui.process_mode = Node.PROCESS_MODE_ALWAYS

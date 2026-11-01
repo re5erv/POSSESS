@@ -4,9 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://b1owp87nwry03" path="res://objects/specimen.tscn" id="2_ppgk2"]
 [ext_resource type="Texture2D" uid="uid://drrdwa6xe4d2j" path="res://textures/worldtileset2.png" id="2_t1rx8"]
 [ext_resource type="PackedScene" uid="uid://d26w4lymt5t7p" path="res://objects/soul.tscn" id="3_2r41h"]
+[ext_resource type="Script" uid="uid://cefwub6g5susu" path="res://scenes/canvas_modulate.gd" id="5_arp2o"]
 [ext_resource type="PackedScene" uid="uid://b8vuu8l7yf4to" path="res://objects/stol.tscn" id="5_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://ngexwrf8dtdq" path="res://objects/flask.tscn" id="6_2r41h"]
-[ext_resource type="AudioStream" uid="uid://vain7q7cmowt" path="res://music/02.ogg" id="8_b121j"]
+[ext_resource type="AudioStream" uid="uid://bl33faxli4xti" path="res://music/02.ogg" id="8_b121j"]
 [ext_resource type="PackedScene" uid="uid://butoq2re0bgyf" path="res://ui/HPDisplay.tscn" id="8_hpdisp"]
 [ext_resource type="PackedScene" uid="uid://bgr0ubbhiy837" path="res://objects/door.tscn" id="10_8iemx"]
 [ext_resource type="PackedScene" uid="uid://bvuhl1elebt4h" path="res://objects/Ucheni.tscn" id="11_8iemx"]
@@ -15,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://7nadxxliamp1" path="res://objects/Specnaz.tscn" id="13_fpun6"]
 [ext_resource type="PackedScene" uid="uid://2381rvo0puue" path="res://objects/Beta7.tscn" id="14_wc255"]
 [ext_resource type="Script" uid="uid://dwkkxcohfeoyq" path="res://objects/door2.gd" id="15_wc255"]
+[ext_resource type="PackedScene" uid="uid://csqmdpnlvcvl6" path="res://objects/miak.tscn" id="17_ux5qa"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b121j"]
 texture = ExtResource("1_mx8sn")
@@ -903,6 +905,8 @@ position = Vector2(13, 86)
 [node name="Soul" parent="Specimen" unique_id=100551520 instance=ExtResource("3_2r41h")]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1221638394]
+script = ExtResource("5_arp2o")
+flash_color = Color(0.9999998, 0.77750987, 0.748624, 1)
 
 [node name="StaticBody2D" parent="." unique_id=1541013872 instance=ExtResource("5_ppgk2")]
 position = Vector2(61, 68)
@@ -944,27 +948,23 @@ position = Vector2(101, -82)
 position = Vector2(100, 75)
 
 [node name="Room2" type="Node" parent="." unique_id=1589748657]
+script = ExtResource("11_64w2a")
 
 [node name="Character4" parent="Room2" unique_id=1398114052 instance=ExtResource("12_64w2a")]
 position = Vector2(35, -235)
 
-[node name="Character5" parent="Room2" unique_id=593493776 instance=ExtResource("12_64w2a")]
-position = Vector2(163, -236)
-
 [node name="Character6" parent="Room2" unique_id=1886843185 instance=ExtResource("12_64w2a")]
 position = Vector2(241, -148)
-
-[node name="Character7" parent="Room2" unique_id=322831147 instance=ExtResource("12_64w2a")]
-position = Vector2(124, -139)
 
 [node name="Character8" parent="Room2" unique_id=1356092320 instance=ExtResource("11_8iemx")]
 position = Vector2(108, -221)
 
 [node name="Door" parent="Room2" unique_id=1058349334 instance=ExtResource("10_8iemx")]
-position = Vector2(271, -169.00002)
+position = Vector2(270, -173.00002)
 scale = Vector2(1, 1.8399999)
 
 [node name="Room3" type="Node" parent="." unique_id=1622654130]
+script = ExtResource("11_64w2a")
 
 [node name="Door" parent="Room3" unique_id=1257945280 instance=ExtResource("10_8iemx")]
 position = Vector2(560, -465)
@@ -973,14 +973,8 @@ rotation = 1.5707964
 [node name="Character" parent="Room3" unique_id=1388229742 instance=ExtResource("11_8iemx")]
 position = Vector2(310, -332)
 
-[node name="Character2" parent="Room3" unique_id=82067408 instance=ExtResource("11_8iemx")]
-position = Vector2(377, -282)
-
 [node name="Character3" parent="Room3" unique_id=35056174 instance=ExtResource("11_8iemx")]
 position = Vector2(378, -193)
-
-[node name="Character4" parent="Room3" unique_id=1485005989 instance=ExtResource("13_fpun6")]
-position = Vector2(487, -326)
 
 [node name="Character5" parent="Room3" unique_id=2058047746 instance=ExtResource("13_fpun6")]
 position = Vector2(593, -429)
@@ -992,6 +986,7 @@ position = Vector2(328, -420)
 position = Vector2(295, -248)
 
 [node name="Room4" type="Node" parent="." unique_id=165522791]
+script = ExtResource("11_64w2a")
 
 [node name="Door" parent="Room4" unique_id=1333456422 instance=ExtResource("10_8iemx")]
 position = Vector2(512, -737)
@@ -1000,34 +995,20 @@ rotation = 1.5707964
 [node name="Character8" parent="Room4" unique_id=902616951 instance=ExtResource("13_fpun6")]
 position = Vector2(444, -518)
 
-[node name="Character9" parent="Room4" unique_id=918577882 instance=ExtResource("13_fpun6")]
-position = Vector2(448, -621)
-
 [node name="Character10" parent="Room4" unique_id=622637688 instance=ExtResource("13_fpun6")]
 position = Vector2(581, -649)
 
 [node name="Character11" parent="Room4" unique_id=138834001 instance=ExtResource("13_fpun6")]
 position = Vector2(439, -688)
 
-[node name="Character" parent="Room4" unique_id=277387528 instance=ExtResource("14_wc255")]
-position = Vector2(466, -1162)
-
-[node name="Character2" parent="Room4" unique_id=1260491123 instance=ExtResource("14_wc255")]
-position = Vector2(555, -1166)
-
-[node name="Character3" parent="Room4" unique_id=343490048 instance=ExtResource("14_wc255")]
-position = Vector2(535, -1111)
-
 [node name="Room5" type="Node" parent="." unique_id=481061064]
+script = ExtResource("11_64w2a")
 
 [node name="Character12" parent="Room5" unique_id=1861976257 instance=ExtResource("13_fpun6")]
 position = Vector2(537, -786)
 
 [node name="Character13" parent="Room5" unique_id=1740387141 instance=ExtResource("13_fpun6")]
 position = Vector2(492, -935)
-
-[node name="Character14" parent="Room5" unique_id=1528181895 instance=ExtResource("13_fpun6")]
-position = Vector2(534, -1069)
 
 [node name="Character15" parent="Room5" unique_id=21542139 instance=ExtResource("12_64w2a")]
 position = Vector2(483, -1074)
@@ -1036,7 +1017,11 @@ position = Vector2(483, -1074)
 position = Vector2(512, -1137)
 rotation = 1.5707964
 
+[node name="Character3" parent="Room5" unique_id=343490048 instance=ExtResource("14_wc255")]
+position = Vector2(535, -1111)
+
 [node name="Room6" type="Node" parent="." unique_id=1750712598]
+script = ExtResource("11_64w2a")
 
 [node name="Door" parent="Room6" unique_id=592798752 instance=ExtResource("10_8iemx")]
 position = Vector2(512, -1214)
@@ -1044,3 +1029,58 @@ rotation = 1.5707964
 script = ExtResource("15_wc255")
 end_scene_path = "res://scenes/EndMenu.tscn"
 transition_delay = 1.0
+
+[node name="Character" parent="Room6" unique_id=277387528 instance=ExtResource("14_wc255")]
+position = Vector2(466, -1162)
+
+[node name="Character2" parent="Room6" unique_id=1260491123 instance=ExtResource("14_wc255")]
+position = Vector2(555, -1166)
+
+[node name="AnimatedSprite2D" parent="." unique_id=1348291754 instance=ExtResource("17_ux5qa")]
+position = Vector2(41, -104)
+
+[node name="AnimatedSprite2D2" parent="." unique_id=9019475 instance=ExtResource("17_ux5qa")]
+position = Vector2(87, -104)
+
+[node name="AnimatedSprite2D3" parent="." unique_id=155353243 instance=ExtResource("17_ux5qa")]
+position = Vector2(72, -1)
+
+[node name="AnimatedSprite2D4" parent="." unique_id=578234227 instance=ExtResource("17_ux5qa")]
+position = Vector2(264, -207)
+rotation = 1.5707964
+
+[node name="AnimatedSprite2D5" parent="." unique_id=1989290474 instance=ExtResource("17_ux5qa")]
+position = Vector2(456, -220)
+rotation = 1.5707964
+
+[node name="AnimatedSprite2D6" parent="." unique_id=1111374313 instance=ExtResource("17_ux5qa")]
+position = Vector2(456, -293)
+rotation = 1.5707964
+
+[node name="AnimatedSprite2D7" parent="." unique_id=2117061299 instance=ExtResource("17_ux5qa")]
+position = Vector2(616, -375)
+rotation = 1.5707964
+
+[node name="AnimatedSprite2D8" parent="." unique_id=468497455 instance=ExtResource("17_ux5qa")]
+position = Vector2(536, -449)
+
+[node name="AnimatedSprite2D10" parent="." unique_id=1913619318 instance=ExtResource("17_ux5qa")]
+position = Vector2(488, -721)
+
+[node name="AnimatedSprite2D11" parent="." unique_id=521690824 instance=ExtResource("17_ux5qa")]
+position = Vector2(536, -721)
+
+[node name="AnimatedSprite2D12" parent="." unique_id=1075358394 instance=ExtResource("17_ux5qa")]
+position = Vector2(488, -1121)
+
+[node name="AnimatedSprite2D13" parent="." unique_id=1039454509 instance=ExtResource("17_ux5qa")]
+position = Vector2(536, -1121)
+
+[node name="AnimatedSprite2D14" parent="." unique_id=734419222 instance=ExtResource("17_ux5qa")]
+position = Vector2(487, -1201)
+
+[node name="AnimatedSprite2D15" parent="." unique_id=2069534784 instance=ExtResource("17_ux5qa")]
+position = Vector2(536, -1201)
+
+[node name="AnimatedSprite2D9" parent="." unique_id=112916158 instance=ExtResource("17_ux5qa")]
+position = Vector2(585, -449)

@@ -5,9 +5,9 @@ class_name MainMenu
 const GAME_SCENE: String = "res://scenes/level.tscn"
 
 # Настройки параллакса за курсором мыши
-@export var buttons_parallax_strength: float = 25.0 # Смещение кнопок (Block 2)
-@export var logo_parallax_strength: float = 12.0    # Смещение логотипа (Block 1)
-@export var follow_speed: float = 5.0              # Скорость сглаживания движения
+@export var buttons_parallax_strength: float = 25.0 
+@export var logo_parallax_strength: float = 12.0    
+@export var follow_speed: float = 5.0              
 
 # Ссылки на узлы интерфейса
 @onready var settings_menu: SettingsMenu = $SettingsMenu
@@ -18,9 +18,16 @@ const GAME_SCENE: String = "res://scenes/level.tscn"
 var _initial_buttons_pos: Vector2 = Vector2.ZERO
 var _initial_logo_pos: Vector2 = Vector2.ZERO
 
-
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# --- ОЧИСТКА КОРНЯ ОТ МЕНЮ ПАУЗЫ ---
+	# Проходим по всем узлам в корне игры
+	for child in get_tree().root.get_children():
+		# Если это меню паузы (или SettingsMenu), которое висит отдельно
+		if child is PauseMenu or child is SettingsMenu:
+			child.queue_free()
+	# -----------------------------------
 	
 	if moving_buttons != null:
 		_initial_buttons_pos = moving_buttons.position
@@ -33,10 +40,8 @@ func _ready() -> void:
 		if first_button != null:
 			first_button.grab_focus()
 
-
 func _process(delta: float) -> void:
 	_update_mouse_follow(delta)
-
 
 ## Плавное смещение узлов в зависимости от положения мыши
 func _update_mouse_follow(delta: float) -> void:
@@ -59,33 +64,34 @@ func _update_mouse_follow(delta: float) -> void:
 		var target_logo_pos := _initial_logo_pos + (mouse_offset * logo_parallax_strength)
 		moving_logo.position = moving_logo.position.lerp(target_logo_pos, delta * follow_speed)
 
-
 ## Нажатие кнопки «Новая игра»
 func _on_new_game_pressed() -> void:
 	_start_game()
 
-
 ## Нажатие кнопки «Продолжить»
 func _on_continue_pressed() -> void:
-	# TODO: Добавить логику загрузки последнего сохранения
 	_start_game()
-
 
 ## Запуск игрового процесса
 func _start_game() -> void:
+	# Перед запуском игры тоже на всякий случай удаляем меню паузы
+	for child in get_tree().root.get_children():
+		if child is PauseMenu or child is SettingsMenu:
+			child.queue_free()
+	
+	# Снимаем паузу (если была)
+	get_tree().paused = false
+	
 	_change_scene(GAME_SCENE)
-
 
 ## Открытие меню настроек
 func _on_settings_pressed() -> void:
 	if settings_menu != null:
 		settings_menu.open()
 
-
 ## Выход из игры
 func _on_exit_pressed() -> void:
 	get_tree().quit()
-
 
 ## Переход на другую сцену по переданному пути
 func _change_scene(path: String) -> void:

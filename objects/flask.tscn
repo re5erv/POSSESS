@@ -59,4 +59,4 @@ animation = &"crash"
 
 [node name="Crash" type="AudioStreamPlayer2D" parent="." unique_id=379469550]
 stream = ExtResource("3_p0eir")
-bus = &"Effects"
+bus = &"SFX"

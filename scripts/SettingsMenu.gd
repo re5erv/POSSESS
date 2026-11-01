@@ -20,7 +20,6 @@ const CONFIG_PATH: String = "user://settings.cfg"
 
 var _tween: Tween
 
-
 func _ready() -> void:
 	_ensure_bus("Music")
 	_ensure_bus("SFX")
@@ -41,7 +40,6 @@ func _ready() -> void:
 	visible = false
 	_window.modulate.a = 0.0
 
-
 func open() -> void:
 	visible = true
 	_close_button.grab_focus()
@@ -50,7 +48,6 @@ func open() -> void:
 	_window.modulate.a = 0.0
 	_tween = create_tween()
 	_tween.tween_property(_window, "modulate:a", 1.0, 0.15)
-
 
 func close() -> void:
 	_save_settings()
@@ -61,17 +58,14 @@ func close() -> void:
 	_tween.tween_callback(func() -> void: visible = false)
 	closed.emit()
 
-
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		close()
 
-
 func _on_backdrop_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
 		close()
-
 
 func _on_fullscreen_toggled(pressed: bool) -> void:
 	DisplayServer.window_set_mode(
@@ -79,21 +73,17 @@ func _on_fullscreen_toggled(pressed: bool) -> void:
 		else DisplayServer.WINDOW_MODE_WINDOWED
 	)
 
-
 func _on_master_changed(value: float) -> void:
 	_apply_bus("Master", value)
 	_refresh_label(value, _master_value)
-
 
 func _on_music_changed(value: float) -> void:
 	_apply_bus("Music", value)
 	_refresh_label(value, _music_value)
 
-
 func _on_sfx_changed(value: float) -> void:
 	_apply_bus("SFX", value)
 	_refresh_label(value, _sfx_value)
-
 
 func _ensure_bus(bus_name: String) -> void:
 	if AudioServer.get_bus_index(bus_name) != -1:
@@ -102,7 +92,6 @@ func _ensure_bus(bus_name: String) -> void:
 	AudioServer.add_bus(index)
 	AudioServer.set_bus_name(index, bus_name)
 	AudioServer.set_bus_send(index, "Master")
-
 
 func _apply_bus(bus_name: String, value: float) -> void:
 	var index: int = AudioServer.get_bus_index(bus_name)
@@ -114,10 +103,8 @@ func _apply_bus(bus_name: String, value: float) -> void:
 		AudioServer.set_bus_mute(index, false)
 		AudioServer.set_bus_volume_db(index, linear_to_db(value))
 
-
 func _refresh_label(value: float, label: Label) -> void:
 	label.text = "%d%%" % roundi(value * 100.0)
-
 
 func _load_settings() -> void:
 	var config := ConfigFile.new()
@@ -130,10 +117,14 @@ func _load_settings() -> void:
 		DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
 	)
 
-
 func _save_settings() -> void:
 	var config := ConfigFile.new()
 	config.set_value("audio", "master", _master_slider.value)
 	config.set_value("audio", "music", _music_slider.value)
 	config.set_value("audio", "sfx", _sfx_slider.value)
 	config.save(CONFIG_PATH)
+
+# --- НОВАЯ ФУНКЦИЯ ---
+func destroy_menu():
+	# Закрываем и удаляем меню
+	queue_free()

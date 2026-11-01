@@ -28,7 +28,9 @@ func _ready():
 	original_collision_mask = collision_mask
 	scale = Vector2(base_scale, base_scale)
 	
-
+	if stats:
+		stats.max_health = 100
+		stats.health = 100
 
 func _process(_delta):
 	if dead: return
@@ -55,6 +57,13 @@ func _process(_delta):
 
 func _physics_process(_delta):
 	if dead or is_jumping: return
+	
+	# --- ВЫЗОВ МЕНЮ ПАУЗЫ ---
+	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"):
+		pause_menu()
+		return
+	# --------------------------
+	
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	if input_dir.length() > 0.1:
@@ -126,23 +135,17 @@ func die():
 	if dead: return
 	dead = true
 	
-	# 1. Отключаем управление и физику
 	set_physics_process(false)
 	velocity = Vector2.ZERO
 	
-	# 2. Проигрываем анимацию смерти
 	if sprite:
 		sprite.play("Dead")
-		# Ждем, пока анимация проиграется до конца (если она не зациклена)
 		await sprite.animation_finished
-	# Если анимации "Dead" нет, просто ждем 0.5 секунды
 	else:
 		await get_tree().create_timer(0.5).timeout
 	
-	# 3. Только теперь замораживаем игру
 	get_tree().paused = true
 	
-	# 4. Создаем CanvasLayer
 	var canvas = CanvasLayer.new()
 	canvas.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().root.add_child(canvas)
@@ -181,3 +184,21 @@ func die():
 	canvas.queue_free() 
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+func pause_menu():
+	# Ставим игру на паузу
+	get_tree().paused = true
+	
+	# Загружаем сцену меню
+	var pause_scene = preload("res://ui/PauseMenu.tscn")
+	var pause_ui = pause_scene.instantiate()
+	
+	# ВАЖНО: Добавляем в корень игры, а не к персонажу!
+	get_tree().root.add_child(pause_ui)
+	
+	# На всякий случай делаем его видимым (если в сцене стоит visible = false)
+	if pause_ui is CanvasLayer or pause_ui is Control:
+		pause_ui.visible = true
+		
+	# Включаем игнорирование паузы для самого меню, чтобы кнопки работали
+	pause_ui.process_mode = Node.PROCESS_MODE_ALWAYS

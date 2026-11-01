@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://csqmdpnlvcvl6"]
+
+[ext_resource type="Texture2D" uid="uid://b721rqlh8jxfs" path="res://textures/worldtileset.png" id="1_jo486"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syikx"]
+atlas = ExtResource("1_jo486")
+region = Rect2(0, 240, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xq53n"]
+atlas = ExtResource("1_jo486")
+region = Rect2(0, 224, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bhunq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syikx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xq53n")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 1.6
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" unique_id=1348291754]
+sprite_frames = SubResource("SpriteFrames_bhunq")
+autoplay = "default"
+frame_progress = 0.73069143

@@ -221,15 +221,15 @@ in_mag_max = 100
 
 [node name="Shoot" type="AudioStreamPlayer2D" parent="." unique_id=2062929472]
 stream = ExtResource("9_ndvcr")
-bus = &"Effects"
+bus = &"SFX"
 
 [node name="ScreamSound" type="AudioStreamPlayer2D" parent="." unique_id=533756508]
 stream = ExtResource("10_mti6u")
-bus = &"Effects"
+bus = &"SFX"
 
 [node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=1444676496]
 stream = ExtResource("11_24l3j")
-bus = &"Effects"
+bus = &"SFX"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1764370096]
 collision_layer = 16

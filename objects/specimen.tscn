@@ -144,4 +144,4 @@ max_health = 40
 
 [node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=538523408]
 stream = ExtResource("4_inf8p")
-bus = &"Effects"
+bus = &"SFX"
