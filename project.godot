@@ -11,13 +11,19 @@ config_version=5
 [application]
 
 config/name="GamejamGAME"
-run/main_scene="uid://daxs7ocu611eh"
+run/main_scene="uid://c5txe0w7ubgnv"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.11858145, 0.11858136, 0.11858138, 1)
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="uid://ehcpstq1vuyu"
 
 [autoload]
 
 DialogueManager="*uid://c3rodes2l3gxb"
+Crosshair="*uid://b6xy5il3u3m7y"
 
 [display]
 
@@ -42,6 +48,8 @@ folder_colors={
 
 human=""
 enemies=""
+table=""
+flask=""
 
 [input]
 
@@ -100,6 +108,7 @@ jump={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+2d/default_gravity=0.0
 
 [rendering]
 
@@ -107,4 +116,5 @@ textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.10747974, 0.10747973, 0.107479684, 1)
 textures/use_physical_light_units=false

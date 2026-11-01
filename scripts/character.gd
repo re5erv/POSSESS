@@ -13,7 +13,7 @@ var ai_reaction_timer = 0.0
 var is_shooting = false
 var current_target = null
 
-# --- Ссылки на узлы (БЕЗ ЗВУКОВ) ---
+# --- Ссылки на узлы ---
 @onready var stats = $Stats
 @onready var Torso_sprite = $Torso
 @onready var Legs_sprite = $Torso/Legs
@@ -25,7 +25,6 @@ var current_target = null
 @onready var liner_scene = preload("res://objects/Liner.tscn")
 var bullet_path = preload("res://objects/Bullet.tscn")
 
-# --- Переменные игрока ---
 var time_played = 0.0
 var dead = false
 var shoot_timer = 0.0
@@ -35,7 +34,6 @@ var is_empty_sound_playing = false
 var hunger_timer = 0.0
 var hunger_interval = 10.0
 
-# Переменные для оружия (всегда int, никогда не Nil)
 var current_weapon_type: String = "Uzi"
 var current_ammo_in_mag: int = 32
 var max_ammo_in_mag: int = 32
@@ -57,24 +55,16 @@ func _ready():
 	stats.health = 100
 	stats.hunger = 100
 	
-	# ИНИЦИАЛИЗАЦИЯ ОРУЖИЯ (БЕЗ КРАШЕЙ)
 	if data_gun:
 		if "gun_name" in data_gun: current_weapon_type = data_gun.gun_name
 		if "in_mag_max" in data_gun: max_ammo_in_mag = data_gun.in_mag_max
 		if "fire_rate" in data_gun: fire_rate = data_gun.fire_rate
-		
 		if max_ammo_in_mag <= 0: max_ammo_in_mag = 32
 		current_ammo_in_mag = max_ammo_in_mag
-			
-	if is_possessed:
-		camera = get_viewport().get_camera_2d()
-		if camera:
-			camera.zoom = Vector2(5, 5)
 
 func possess():
 	if is_possessed or dead: return
 	is_possessed = true
-	
 	remove_from_group("human")
 	add_to_group("enemies")
 	
@@ -84,7 +74,6 @@ func possess():
 		cam.position = Vector2.ZERO
 		if cam.has_method("snap_to_parent"):
 			cam.snap_to_parent()
-	
 	print("Вселились в ", name)
 
 func _process(_delta):
@@ -92,6 +81,7 @@ func _process(_delta):
 	time_played += _delta
 	
 	if is_possessed:
+		# ТВОЙ РАБОЧИЙ ПОВОРОТ
 		var mouse_angle = global_position.direction_to(get_global_mouse_position()).angle()
 		rotation = mouse_angle + PI/2.0
 
@@ -145,8 +135,29 @@ func player_logic(_delta):
 				die()
 
 # ==========================================
-# УМНЫЙ ИИ (Ищет цель в группе "enemies")
+# ТВОЙ РАБОЧИЙ ВЫСТРЕЛ
 # ==========================================
+func shoot_nigg():
+	if current_ammo_in_mag <= 0: return
+	current_ammo_in_mag -= 1
+	
+	var liner = liner_scene.instantiate()
+	var spawn_offset = Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(rotation)
+	liner.global_position = global_position + spawn_offset
+	liner.rotation = randf_range(-PI, PI)
+	get_parent().add_child(liner)
+	
+	var bullet = bullet_path.instantiate()
+	bullet.dir = rotation
+	bullet.pos = shoot_pos.global_position
+	get_parent().add_child(bullet)
+	
+	Torso_sprite.play("ShootUzi")
+	$Shoot.play()
+	await get_tree().create_timer(0.1).timeout
+	if not Input.is_action_pressed("shoot"):
+		Torso_sprite.play("Uzi")
+
 func enemy_ai_logic(delta):
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	var visible_target = null
@@ -216,29 +227,6 @@ func enemy_ai_logic(delta):
 		velocity = Vector2.ZERO
 		move_and_slide()
 
-# ==========================================
-# СТРЕЛЬБА И ПЕРЕЗАРЯДКА (БЕЗ ЗВУКОВ)
-# ==========================================
-func shoot_nigg():
-	if current_ammo_in_mag <= 0: return
-	current_ammo_in_mag -= 1
-	
-	var liner = liner_scene.instantiate()
-	var spawn_offset = Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(rotation)
-	liner.global_position = global_position + spawn_offset
-	liner.rotation = randf_range(-PI, PI)
-	get_parent().add_child(liner)
-	
-	var bullet = bullet_path.instantiate()
-	bullet.dir = rotation
-	bullet.pos = shoot_pos.global_position
-	get_parent().add_child(bullet)
-	
-	Torso_sprite.play("ShootUzi")
-	await get_tree().create_timer(0.1).timeout
-	if not Input.is_action_pressed("shoot"):
-		Torso_sprite.play("Uzi")
-
 func enemy_shoot():
 	if current_ammo_in_mag <= 0: return
 	current_ammo_in_mag -= 1
@@ -277,9 +265,6 @@ func enemy_reload():
 	ai_is_reloading = false
 	Torso_sprite.play("LarpUzi")
 
-# ==========================================
-# СМЕРТЬ И АНИМАЦИИ
-# ==========================================
 func take_damage(dmg, from_enemy = false):
 	if dead: return
 	stats.health -= dmg

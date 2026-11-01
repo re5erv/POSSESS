@@ -2,7 +2,7 @@ extends Control
 class_name MainMenu
 
 # Путь к сцене игрового процесса
-const GAME_SCENE: String = "res://scenes/main.tscn"
+const GAME_SCENE: String = "res://scenes/level.tscn"
 
 # Ссылки на узлы интерфейса
 @onready var settings_menu: SettingsMenu = $SettingsMenu

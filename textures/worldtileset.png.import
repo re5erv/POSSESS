@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfguymhjricxp"
-valid=false
+uid="uid://b721rqlh8jxfs"
+path="res://.godot/imported/worldtileset.png-075397ff122778955aeb03cbbae0e903.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
-source_file="res://textures/world_tileset3 (1).png"
+source_file="res://textures/worldtileset.png"
+dest_files=["res://.godot/imported/worldtileset.png-075397ff122778955aeb03cbbae0e903.ctex"]
 
 [params]
 

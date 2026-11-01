@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dw8ufrt4dy585" path="res://textures/BarCivil.png" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://b5xe0ra4ddoa4" path="res://scripts/stats.gd" id="7_2rlf8"]
 [ext_resource type="Script" uid="uid://bd3s4nay21o47" path="res://scripts/DataGun.gd" id="7_4lryg"]
+[ext_resource type="AudioStream" uid="uid://heu4xsvgc4ck" path="res://Sounds/Shoot.wav" id="8_y08ld"]
 [ext_resource type="Script" uid="uid://bnkqht1ultxi" path="res://scripts/holster.gd" id="9_dunks"]
 [ext_resource type="Texture2D" uid="uid://cpi1tbfcgeb81" path="res://textures/Holster.png" id="10_68atb"]
 
@@ -643,3 +644,7 @@ script = ExtResource("7_4lryg")
 gun_name = "Uzi"
 ammo_in_mag = 32
 in_mag_max = 32
+
+[node name="Shoot" type="AudioStreamPlayer2D" parent="." unique_id=2062929472]
+stream = ExtResource("8_y08ld")
+bus = &"Effects"

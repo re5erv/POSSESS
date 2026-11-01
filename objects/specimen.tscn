@@ -88,10 +88,12 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s1rbj"]
-radius = 8.0
-height = 16.0
+radius = 5.0
+height = 10.0
 
 [node name="Specimen" type="CharacterBody2D" unique_id=37663945 groups=["enemies"]]
+z_index = 2
+collision_mask = 7
 script = ExtResource("1_s1rbj")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1144493393]
@@ -100,5 +102,7 @@ sprite_frames = SubResource("SpriteFrames_bhunq")
 animation = &"Jump"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1628715499]
+light_mask = 3
+visibility_layer = 3
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_s1rbj")

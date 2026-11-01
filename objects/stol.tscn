@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b8vuu8l7yf4to"]
+
+[ext_resource type="Script" uid="uid://c2l0c5stf4ev4" path="res://scripts/stol.gd" id="1_q8sqd"]
+[ext_resource type="Texture2D" uid="uid://b721rqlh8jxfs" path="res://textures/worldtileset.png" id="2_c0rmo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bhunq"]
+size = Vector2(14, 30)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=1541013872 groups=["table"]]
+scale = Vector2(2, 2)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_q8sqd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=48990849]
+shape = SubResource("RectangleShape2D_bhunq")
+
+[node name="DetectArea" type="Area2D" parent="." unique_id=853389271]
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=707196190]
+visibility_layer = 7
+shape = SubResource("RectangleShape2D_bhunq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=403382266]
+texture = ExtResource("2_c0rmo")
+region_enabled = true
+region_rect = Rect2(224, 224, 16, 32)

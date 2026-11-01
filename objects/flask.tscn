@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://ngexwrf8dtdq"]
+
+[ext_resource type="Script" uid="uid://dibooxkj6cale" path="res://scripts/flask.gd" id="1_wtfoh"]
+[ext_resource type="Texture2D" uid="uid://b721rqlh8jxfs" path="res://textures/worldtileset.png" id="2_p0eir"]
+[ext_resource type="AudioStream" uid="uid://cgcha30xdhibb" path="res://Sounds/Crash.mp3" id="3_p0eir"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wtfoh"]
+size = Vector2(5, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p0eir"]
+atlas = ExtResource("2_p0eir")
+region = Rect2(0, 144, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vtsv"]
+atlas = ExtResource("2_p0eir")
+region = Rect2(16, 144, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtfoh"]
+atlas = ExtResource("2_p0eir")
+region = Rect2(0, 144, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sn0t7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p0eir")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3vtsv")
+}],
+"loop": 0,
+"name": &"crash",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtfoh")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="flask" type="RigidBody2D" unique_id=1471602628 groups=["flask"]]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_wtfoh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=529515320]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_wtfoh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1531086694]
+position = Vector2(1, 0)
+sprite_frames = SubResource("SpriteFrames_sn0t7")
+animation = &"crash"
+
+[node name="Crash" type="AudioStreamPlayer2D" parent="." unique_id=379469550]
+stream = ExtResource("3_p0eir")
+bus = &"Effects"

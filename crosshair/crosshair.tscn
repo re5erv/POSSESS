@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://b6xy5il3u3m7y"]
+
+[ext_resource type="Script" uid="uid://bwyn3a343qx7i" path="res://crosshair/crosshair.gd" id="1_rtxwy"]
+
+[node name="Crosshair" type="CanvasLayer" unique_id=1407594901]
+layer = 1000
+
+[node name="Control" type="Control" parent="." unique_id=558132107]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_rtxwy")
