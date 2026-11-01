@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://4u3uc0ldahyf" path="res://scripts/MainMenu.gd" id="1_l72w3"]
 [ext_resource type="Shader" uid="uid://cg4lhs0ra6i52" path="res://SpriteFrames/drip.gdshader" id="2_826wr"]
+[ext_resource type="Texture2D" uid="uid://bg5chfacni1wl" path="res://textures/picture_205f819f07ae4f1087c851d82914389f.png" id="2_ucygd"]
 [ext_resource type="Texture2D" uid="uid://bvk1rjoqm28jp" path="res://textures/game_logo.png" id="3_l72w3"]
 [ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="4_mipys"]
 [ext_resource type="PackedScene" uid="uid://ilmv0r63vqo6" path="res://scenes/SettingsMenu.tscn" id="5_8a8k8"]
+[ext_resource type="AudioStream" uid="uid://bujkniwbbl2v7" path="res://music/01.ogg" id="7_ucygd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_biqin"]
 shader = ExtResource("2_826wr")
@@ -34,6 +36,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_ucygd")
 
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=2045348144]
 layout_mode = 1
@@ -121,6 +124,12 @@ text = "ВЫХОД"
 
 [node name="SettingsMenu" parent="." unique_id=710301756 instance=ExtResource("5_8a8k8")]
 unique_name_in_owner = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1581688831]
+stream = ExtResource("7_ucygd")
+autoplay = true
+bus = &"Music"
+parameters/looping = false
 
 [connection signal="pressed" from="Block 2/Buttons/NewGameButton" to="." method="_on_new_game_pressed"]
 [connection signal="pressed" from="Block 2/Buttons/SettingsButton" to="." method="_on_settings_pressed"]

@@ -38,11 +38,32 @@ func dissolve_corpse(body):
 	tween.tween_property(body, "modulate:a", 0.0, dissolve_speed)
 	await tween.finished
 	
-	# ЛЕЧИМ ТОЛЬКО СЛИЗНЯ (он в enemies и у него есть Stats, но он не dead)
+	# --- ИЩЕМ ТЕКУЩЕГО ИГРОКА ---
+	var player = null
+	
+	# 1. Ищем слизня (Прыгуна)
 	for p in get_tree().get_nodes_in_group("enemies"):
-		if "dead" in p and p.dead: continue # Пропускаем мертвых
-		if p.has_method("heal"): # Если у слизи есть heal
-			p.heal(heal_amount)
-			print("+", heal_amount, " ХП Слизню")
+		if not p.has_method("heal"): continue
+		# Если это слизень (у него нет is_possessed или он false, но он живой)
+		if "is_possessed" in p and not p.is_possessed:
+			player = p
+			break
 			
+	# 2. Если слизня нет, ищем человека, в которого вселились
+	if not player:
+		for p in get_tree().get_nodes_in_group("enemies"):
+			if "is_possessed" in p and p.is_possessed and not p.dead:
+				player = p
+				break
+				
+	# 3. Лечим
+	if player:
+		if player.has_method("heal"):
+			player.heal(heal_amount)
+			print("+", heal_amount, " ХП (Игроку: ", player.name, ")")
+		else:
+			print("У игрока нет метода heal!")
+	else:
+		print("Игрок не найден!")
+		
 	body.queue_free()

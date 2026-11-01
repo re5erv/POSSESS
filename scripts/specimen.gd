@@ -9,6 +9,7 @@ extends CharacterBody2D
 @export var table_scale_multiplier = 1.3 
 
 @onready var sprite = $AnimatedSprite2D
+@onready var stats = get_node_or_null("Stats")
 
 var original_collision_mask = 0
 var is_jumping = false
@@ -26,23 +27,17 @@ func _ready():
 	
 	original_collision_mask = collision_mask
 	scale = Vector2(base_scale, base_scale)
+	
 
-func heal(amount):
-	if has_node("Stats"):
-		var stats = get_node("Stats")
-		stats.health = min(stats.health + amount, stats.max_health)
-		print("Слизень вылечен на ", amount)
-		
+
 func _process(_delta):
 	if dead: return
-	
 	var mouse_angle = global_position.direction_to(get_global_mouse_position()).angle()
 	rotation = mouse_angle + PI/2.0 
 	
 	if is_jumping:
 		jump_timer += _delta
 		var progress = jump_timer / jump_duration
-		
 		var flight_curve = sin(progress * PI)
 		var current_scale = base_scale + (base_scale * jump_scale_multiplier - base_scale) * flight_curve
 		scale = Vector2(current_scale, current_scale)
@@ -60,7 +55,6 @@ func _process(_delta):
 
 func _physics_process(_delta):
 	if dead or is_jumping: return
-	
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	if input_dir.length() > 0.1:
@@ -86,15 +80,12 @@ func start_jump():
 	is_jumping = true
 	jump_timer = 0.0
 	jump_target = null 
-	
 	var mouse_pos = get_global_mouse_position()
 	jump_direction = (mouse_pos - global_position).normalized()
-	
 	collision_mask = 1 
 	
 	var humans = get_tree().get_nodes_in_group("human")
 	var min_dist = jump_distance + 50.0 
-	
 	for human in humans:
 		if human.dead or human.is_possessed: continue
 		var dist = global_position.distance_to(human.global_position)
@@ -103,32 +94,90 @@ func start_jump():
 			if jump_direction.dot(dir_to_human) > 0.7:
 				min_dist = dist
 				jump_target = human
-	
 	if sprite: sprite.play("Jump")
 
 func end_jump():
 	is_jumping = false
 	velocity = Vector2.ZERO
-	
 	if is_on_table:
 		collision_mask = original_collision_mask
 		scale = Vector2(base_scale * table_scale_multiplier, base_scale * table_scale_multiplier)
 	else:
 		collision_mask = original_collision_mask
 		scale = Vector2(base_scale, base_scale)
-		
 	if sprite: sprite.play("Larp")
 
 func possess_target(target):
 	target.possess()
 	queue_free()
 
-func _on_table_area_entered(_table):
-	is_on_table = true
-	if not is_jumping:
-		scale = Vector2(base_scale * table_scale_multiplier, base_scale * table_scale_multiplier)
+func take_damage(dmg, _from_enemy = false):
+	if dead: return
+	if stats:
+		stats.health -= dmg
+		print("Слизень получил урон! ХП: ", stats.health)
+		if stats.health <= 0:
+			die()
+
+# ==========================================
+# СМЕРТЬ С ГЕНЕРАЦИЕЙ ЭКРАНА
+# ==========================================
+func die():
+	if dead: return
+	dead = true
+	
+	# 1. Отключаем управление и физику
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	
+	# 2. Проигрываем анимацию смерти
+	if sprite:
+		sprite.play("Dead")
+		# Ждем, пока анимация проиграется до конца (если она не зациклена)
+		await sprite.animation_finished
+	# Если анимации "Dead" нет, просто ждем 0.5 секунды
+	else:
+		await get_tree().create_timer(0.5).timeout
+	
+	# 3. Только теперь замораживаем игру
+	get_tree().paused = true
+	
+	# 4. Создаем CanvasLayer
+	var canvas = CanvasLayer.new()
+	canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(canvas)
+	
+	var bg = ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.6)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.process_mode = Node.PROCESS_MODE_ALWAYS
+	canvas.add_child(bg)
+	
+	var label = Label.new()
+	label.text = "ЗАРАЖЕНИЕ УНИЧТОЖЕНО"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	label.add_theme_color_override("font_color", Color.RED)
+	label.add_theme_font_size_override("font_size", 128)
+	
+	var font = load("res://determination.otf")
+	if font: label.add_theme_font_override("font", font)
 		
-func _on_table_area_exited(_table):
-	is_on_table = false
-	if not is_jumping:
-		scale = Vector2(base_scale, base_scale)
+	label.modulate.a = 0.0
+	label.scale = Vector2(0.8, 0.8)
+	label.pivot_offset = get_viewport_rect().size / 2
+	label.process_mode = Node.PROCESS_MODE_ALWAYS
+	canvas.add_child(label)
+	
+	var tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.set_parallel(true)
+	tween.tween_property(label, "modulate:a", 1.0, 2.0)
+	tween.tween_property(label, "scale", Vector2(1.1, 1.1), 2.0)
+	
+	await get_tree().create_timer(3.0, true, false, true).timeout
+	
+	canvas.queue_free() 
+	get_tree().paused = false
+	get_tree().reload_current_scene()

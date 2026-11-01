@@ -3,6 +3,7 @@ extends CharacterBody2D
 @export var move_speed = 120
 @export var is_possessed: bool = false
 
+# --- Переменные ИИ ---
 @export var attack_range = 250
 @export var view_range = 600
 @export var reaction_delay = 0.3
@@ -12,6 +13,7 @@ var ai_reaction_timer = 0.0
 var is_shooting = false
 var current_target = null
 
+# --- Ссылки на узлы ---
 @onready var stats = $Stats
 @onready var Torso_sprite = $Torso
 @onready var Legs_sprite = $Torso/Legs
@@ -23,11 +25,19 @@ var current_target = null
 @onready var scream_sound = get_node_or_null("ScreamSound")
 @onready var possess_sound = get_node_or_null("PossessSound")
 
+# --- Прелоады ---
 @onready var liner_scene = preload("res://objects/Liner.tscn")
 @onready var specimen_scene = preload("res://objects/specimen.tscn")
 @onready var infection_scene = preload("res://objects/Infection.tscn")
 var bullet_path = preload("res://objects/Bullet.tscn")
 
+# --- Эволюция ---
+var poss1_frames = preload("res://SpriteFrames/Poss1.tres")
+var poss2_frames = preload("res://SpriteFrames/Poss2.tres")
+var poss3_frames = preload("res://SpriteFrames/Poss3.tres")
+var current_evolution_level = 1
+
+# --- Переменные игрока ---
 var time_played = 0.0
 var dead = false
 var shoot_timer = 0.0
@@ -35,9 +45,11 @@ var fire_rate = 0.08
 var is_reloading = false
 var is_empty_sound_playing = false
 
+# --- Заражение ---
 var last_spawn_pos = Vector2.ZERO
 @export var spawn_distance = 40.0 
 
+# --- Оружие ---
 var current_weapon_type: String = "Uzi"
 var current_ammo_in_mag: int = 32
 var max_ammo_in_mag: int = 32
@@ -52,7 +64,9 @@ func _ready():
 	Torso_sprite.play("LarpUzi")
 	Legs_sprite.play("Larp")
 	
-	if Possed_sprite: Possed_sprite.hide()
+	if Possed_sprite: 
+		Possed_sprite.hide()
+		Possed_sprite.sprite_frames = poss1_frames
 	
 	ray_cast.enabled = true
 	ray_cast.collide_with_areas = true
@@ -95,8 +109,15 @@ func possess():
 		cam.reparent(self)
 		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
 
+# Вызывается, когда игрок САМ нажимает кнопку спрыгивания (Прыжок в сторону курсора)
 func unpossess():
 	if dead: return
+	# Откладываем, чтобы не менять физику во время flushing queries
+	_do_unpossess.call_deferred()
+
+func _do_unpossess():
+	if dead: return
+	
 	var new_slime = specimen_scene.instantiate()
 	new_slime.global_position = global_position
 	get_parent().add_child(new_slime)
@@ -107,9 +128,33 @@ func unpossess():
 		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
 	
 	await get_tree().process_frame
-	if new_slime and new_slime.has_method("start_jump"):
+	# Добровольный прыжок в сторону курсора
+	if is_instance_valid(new_slime) and new_slime.has_method("start_jump"):
 		new_slime.start_jump()
-	die()
+	
+	die(true)
+
+# Вызывается, когда человека УБИЛИ (просто выпадаем на месте)
+func force_unpossess():
+	if dead: return
+	# Откладываем, чтобы не менять физику во время flushing queries
+	_do_force_unpossess.call_deferred()
+
+func _do_force_unpossess():
+	if dead: return
+	
+	var new_slime = specimen_scene.instantiate()
+	new_slime.global_position = global_position
+	get_parent().add_child(new_slime)
+	
+	var cam = get_tree().get_first_node_in_group("main_camera")
+	if cam:
+		cam.reparent(new_slime)
+		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
+	
+	# НЕ ВЫЗЫВАЕМ start_jump()
+	
+	die(true)
 
 func _process(_delta):
 	if dead: return
@@ -269,8 +314,21 @@ func enemy_reload():
 	ai_is_reloading = false
 	Torso_sprite.play("LarpUzi")
 
+# ==========================================
+# СМЕРТЬ И УРОН
+# ==========================================
 func take_damage(dmg, from_enemy = false):
 	if dead: return
+	
+	# Если в него вселились и он получает смертельный урон — вываливаемся на месте
+	if is_possessed:
+		stats.health -= dmg
+		update_hp_color()
+		if stats.health <= 0:
+			force_unpossess()
+		return
+		
+	# Если это обычный NPC
 	stats.health -= dmg
 	update_hp_color()
 	if stats.health <= 0: die(from_enemy)
@@ -278,8 +336,8 @@ func take_damage(dmg, from_enemy = false):
 func die(from_enemy = false):
 	if dead: return
 	dead = true
-	is_possessed = false # <--- ВАЖНО: больше не заражен
-	remove_from_group("enemies") # <--- Убираем из врагов, чтобы не лечился
+	is_possessed = false 
+	remove_from_group("enemies") 
 	
 	if Possed_sprite: Possed_sprite.hide()
 	Torso_sprite.play("Dead")
@@ -290,15 +348,31 @@ func die(from_enemy = false):
 	z_index = 1
 	add_to_group("corpse")
 	
+	# --- Безопасное отключение коллизии ---
 	var col = get_node_or_null("CollisionShape2D")
-	if col: col.queue_free() # Проходимость
+	if col: 
+		col.set_deferred("disabled", true)
+		col.call_deferred("queue_free")
 	
-	if not is_possessed and not from_enemy:
+	if not from_enemy:
 		for p in get_tree().get_nodes_in_group("enemies"):
 			if p.has_method("on_enemy_killed"): p.on_enemy_killed()
 
+func heal(amount):
+	stats.health += amount
+	update_hp_color()
+	
+	if stats.health >= 200 and current_evolution_level < 3:
+		current_evolution_level = 3
+		if Possed_sprite: Possed_sprite.sprite_frames = poss3_frames
+		print("Эволюция 3 уровня! (200 ХП)")
+	elif stats.health >= 150 and current_evolution_level < 2:
+		current_evolution_level = 2
+		if Possed_sprite: Possed_sprite.sprite_frames = poss2_frames
+		print("Эволюция 2 уровня! (150 ХП)")
+
 func update_hp_color():
-	var health_percent = float(stats.health) / float(stats.max_health)
+	var health_percent = clamp(float(stats.health) / float(stats.max_health), 0.0, 1.0)
 	var red_intensity = 0.1 + (1.0 - health_percent) * 0.5
 	Torso_sprite.modulate = Color(1.0, 1.0 - red_intensity * 0.5, 1.0 - red_intensity * 0.5)
 	Legs_sprite.modulate = Color(1.0, 1.0 - red_intensity * 0.5, 1.0 - red_intensity * 0.5)

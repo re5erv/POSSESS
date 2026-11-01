@@ -2,6 +2,20 @@
 
 [ext_resource type="Script" uid="uid://bvja84f82vprk" path="res://scripts/specimen.gd" id="1_s1rbj"]
 [ext_resource type="Texture2D" uid="uid://0omen57b7x7u" path="res://textures/specimen.png" id="2_7aei6"]
+[ext_resource type="Script" uid="uid://b5xe0ra4ddoa4" path="res://scripts/stats.gd" id="3_7aei6"]
+[ext_resource type="AudioStream" uid="uid://cwb2v4smcscgf" path="res://Sounds/ff06f71f9cb730c (mp3cut.net).mp3" id="4_inf8p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bfrco"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgher"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxywf"]
+atlas = ExtResource("2_7aei6")
+region = Rect2(72, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1rbj"]
 atlas = ExtResource("2_7aei6")
@@ -41,6 +55,20 @@ region = Rect2(0, 24, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bhunq"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bfrco")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgher")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wxywf")
+}],
+"loop": 0,
+"name": &"Dead",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_s1rbj")
@@ -99,10 +127,21 @@ script = ExtResource("1_s1rbj")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1144493393]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_bhunq")
-animation = &"Jump"
+animation = &"Dead"
+frame_progress = 0.58681256
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1628715499]
 light_mask = 3
 visibility_layer = 3
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_s1rbj")
+
+[node name="Stats" type="Node" parent="." unique_id=1292772126]
+script = ExtResource("3_7aei6")
+ammo_in_pocket = 100
+health = 40
+max_health = 40
+
+[node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=538523408]
+stream = ExtResource("4_inf8p")
+bus = &"Effects"
