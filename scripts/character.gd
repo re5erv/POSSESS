@@ -151,9 +151,6 @@ func player_logic(_delta):
 	
 	update_animations(move_input)
 	
-	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"):
-		pause_menu()
-		
 	if InputMap.has_action("reload") and Input.is_action_just_pressed("reload") and not is_reloading and current_ammo_in_mag < max_ammo_in_mag:
 		reload()
 		
@@ -413,8 +410,3 @@ func update_animations(move_input):
 		Torso_sprite.play(torso_anim)
 	if Legs_sprite.animation != legs_anim and Torso_sprite.animation != "Dead" and Torso_sprite.animation != "PossessDead":
 		Legs_sprite.play(legs_anim)
-
-func pause_menu():
-	get_tree().paused = true
-	var pause_ui = preload("res://ui/PauseMenu.tscn").instantiate()
-	add_child(pause_ui)
