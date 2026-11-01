@@ -2,7 +2,13 @@
 
 [ext_resource type="FontFile" uid="uid://4pg72bpn401j" path="res://textures/font/BustlePixel.ttf" id="1_7ida2"]
 [ext_resource type="Script" uid="uid://dsl6kixqmkprd" path="res://scripts/pause_menu.gd" id="1_n5dsq"]
-[ext_resource type="Theme" uid="uid://cnjnj6mkyxxhv" path="res://SpriteFrames/new_theme.tres" id="2_n5dsq"]
+[ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="2_n5dsq"]
+[ext_resource type="FontFile" uid="uid://b1w86pgu64p76" path="res://8bitwondernal.otf" id="3_4dg4t"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yf5fn"]
+font = ExtResource("3_4dg4t")
+font_size = 35
+font_color = Color(1, 0, 0, 1)
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=631655495]
 script = ExtResource("1_n5dsq")
@@ -15,56 +21,44 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Control" unique_id=1339033440]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1751603350]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -84.0
+offset_right = 170.0
+offset_bottom = 84.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.2901961, 0.2901961, 0.2901961, 0.25882354)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1751603350]
-layout_mode = 0
-offset_left = 482.0
-offset_top = 267.0
-offset_right = 670.0
-offset_bottom = 381.0
+theme_override_constants/separation = 12
+alignment = 1
 
 [node name="FinalMud" type="Label" parent="Control/VBoxContainer" unique_id=315235993]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("1_7ida2")
 theme_override_font_sizes/font_size = 35
 text = "PAUSE"
+label_settings = SubResource("LabelSettings_yf5fn")
 horizontal_alignment = 1
 
 [node name="Play" type="Button" parent="Control/VBoxContainer" unique_id=1429044851]
 process_mode = 3
+custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 theme = ExtResource("2_n5dsq")
-theme_override_colors/font_color = Color(0.4392157, 0.4745098, 0.043137256, 1)
-theme_override_colors/font_focus_color = Color(0.22352941, 0.34117648, 0.105882354, 1)
-theme_override_colors/font_pressed_color = Color(0.31764707, 0.3372549, 0, 1)
-theme_override_colors/font_hover_color = Color(0.14509805, 0.24705882, 0.0627451, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 4
-theme_override_fonts/font = ExtResource("1_7ida2")
-theme_override_font_sizes/font_size = 35
-text = "CONTINUE"
+text = "Продолжить"
 
 [node name="Menu" type="Button" parent="Control/VBoxContainer" unique_id=2026610147]
 process_mode = 3
+custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 theme = ExtResource("2_n5dsq")
-theme_override_colors/font_color = Color(0.4392157, 0.4745098, 0.043137256, 1)
-theme_override_colors/font_focus_color = Color(0.22352941, 0.34117648, 0.105882354, 1)
-theme_override_colors/font_pressed_color = Color(0.31764707, 0.3372549, 0, 1)
-theme_override_colors/font_hover_color = Color(0.14509805, 0.24705882, 0.0627451, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 4
-theme_override_fonts/font = ExtResource("1_7ida2")
-theme_override_font_sizes/font_size = 35
-text = "Main Menu"
+text = "Выйти в меню"
