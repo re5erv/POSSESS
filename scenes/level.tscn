@@ -911,6 +911,13 @@ flash_color = Color(0.9999998, 0.77750987, 0.748624, 1)
 [node name="StaticBody2D" parent="." unique_id=1541013872 instance=ExtResource("5_ppgk2")]
 position = Vector2(61, 68)
 
+[node name="StaticBody2D2" parent="." unique_id=793146162 instance=ExtResource("5_ppgk2")]
+position = Vector2(229.00002, -225.00002)
+
+[node name="StaticBody2D3" parent="." unique_id=283352798 instance=ExtResource("5_ppgk2")]
+position = Vector2(398.99997, -343)
+rotation = -1.5707964
+
 [node name="flask" parent="." unique_id=1471602628 instance=ExtResource("6_2r41h")]
 position = Vector2(59, 79)
 
@@ -1084,3 +1091,27 @@ position = Vector2(536, -1201)
 
 [node name="AnimatedSprite2D9" parent="." unique_id=112916158 instance=ExtResource("17_ux5qa")]
 position = Vector2(585, -449)
+
+[node name="flask5" parent="." unique_id=364317899 instance=ExtResource("6_2r41h")]
+position = Vector2(227, -216)
+
+[node name="flask6" parent="." unique_id=1617142620 instance=ExtResource("6_2r41h")]
+position = Vector2(227, -222)
+
+[node name="flask7" parent="." unique_id=173582337 instance=ExtResource("6_2r41h")]
+position = Vector2(233, -220)
+
+[node name="flask8" parent="." unique_id=130945062 instance=ExtResource("6_2r41h")]
+position = Vector2(229, -229)
+
+[node name="flask9" parent="." unique_id=107718227 instance=ExtResource("6_2r41h")]
+position = Vector2(398, -337)
+
+[node name="flask10" parent="." unique_id=1289156138 instance=ExtResource("6_2r41h")]
+position = Vector2(398, -343)
+
+[node name="flask11" parent="." unique_id=675187894 instance=ExtResource("6_2r41h")]
+position = Vector2(404, -341)
+
+[node name="flask12" parent="." unique_id=2093241611 instance=ExtResource("6_2r41h")]
+position = Vector2(400, -350)

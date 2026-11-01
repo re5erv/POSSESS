@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://divanfvreq42q" path="res://scripts/SettingsMenu.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="2_theme"]
+[ext_resource type="AudioStream" uid="uid://b4850ks5jbo8m" path="res://music/4.ogg" id="3_dd8lr"]
 
 [sub_resource type="StyleBoxFlat" id="panel"]
 content_margin_left = 32.0
@@ -171,3 +172,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 26
 text = "НАЗАД"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=423926962]
+stream = ExtResource("3_dd8lr")
+autoplay = true
+bus = &"Music"

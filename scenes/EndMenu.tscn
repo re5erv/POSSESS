@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dtnco82tk66y0"]
 
-[ext_resource type="Script" path="res://scripts/end_menu.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b4j4k88brdtdr" path="res://scripts/end_menu.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="2_theme"]
 [ext_resource type="Texture2D" uid="uid://bvk1rjoqm28jp" path="res://textures/game_logo.png" id="3_logo"]
 [ext_resource type="Shader" uid="uid://cg4lhs0ra6i52" path="res://SpriteFrames/drip.gdshader" id="4_drip"]
+[ext_resource type="AudioStream" uid="uid://b4850ks5jbo8m" path="res://music/4.ogg" id="5_w3t5n"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drip"]
 shader = ExtResource("4_drip")
@@ -15,7 +16,7 @@ shader_parameter/max_drip_length = 0.22
 shader_parameter/stream_width = 0.18
 shader_parameter/root_spread = 1.6
 
-[node name="EndMenu" type="Control"]
+[node name="EndMenu" type="Control" unique_id=1879987789]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,31 +25,30 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1009192003]
 unique_name_in_owner = true
-anchors_preset = 15
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 color = Color(0.02, 0, 0, 0.94)
 
-[node name="Center" type="CenterContainer" parent="."]
-anchors_preset = 15
+[node name="Center" type="CenterContainer" parent="." unique_id=2010539445]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Content" type="VBoxContainer" parent="Center"]
+[node name="Content" type="VBoxContainer" parent="Center" unique_id=1953341198]
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Logo" type="TextureRect" parent="Center/Content"]
+[node name="Logo" type="TextureRect" parent="Center/Content" unique_id=1170783382]
 material = SubResource("ShaderMaterial_drip")
 custom_minimum_size = Vector2(440, 150)
 layout_mode = 2
@@ -57,7 +57,7 @@ texture = ExtResource("3_logo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Title" type="Label" parent="Center/Content"]
+[node name="Title" type="Label" parent="Center/Content" unique_id=1836604725]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.18431373, 0.14117648, 1)
 theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
@@ -66,33 +66,90 @@ theme_override_font_sizes/font_size = 40
 text = "СПАСИБО ЗА ИГРУ"
 horizontal_alignment = 1
 
-[node name="AuthorsTitle" type="Label" parent="Center/Content"]
+[node name="AuthorsTitle" type="Label" parent="Center/Content" unique_id=1552689434]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8509804, 0.8039216, 1)
 theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 28
-text = "АВТОРЫ"
+text = "СОЗДАТЕЛИ"
 horizontal_alignment = 1
 
-[node name="Authors" type="Label" parent="Center/Content"]
+[node name="Authors" type="Label" parent="Center/Content" unique_id=162025219]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9019608, 0.827451, 0.8039216, 1)
+theme_override_colors/font_color = Color(1, 0.26666665, 0, 1)
 theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 24
-text = "Автор 1
-Автор 2
-Автор 3"
+text = "Dogmer (Reserv)"
 horizontal_alignment = 1
 
-[node name="Spacer" type="Control" parent="Center/Content"]
+[node name="Authors4" type="Label" parent="Center/Content" unique_id=710807386]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83856326, 0.52359086, 1, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "Twitch_Lumen"
+horizontal_alignment = 1
+
+[node name="Authors5" type="Label" parent="Center/Content" unique_id=155309931]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.44262788, 0.00096964213, 0.59473276, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "Figure"
+horizontal_alignment = 1
+
+[node name="Authors6" type="Label" parent="Center/Content" unique_id=2042701601]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8144843, 0.5573785, 0.4137683, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "Rusbid"
+horizontal_alignment = 1
+
+[node name="Authors3" type="Label" parent="Center/Content" unique_id=432712029]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.1368, 0.1368, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "Zekler"
+horizontal_alignment = 1
+
+[node name="AuthorsTitle2" type="Label" parent="Center/Content" unique_id=1472277796]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8509804, 0.8039216, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 28
+text = "МУЗЫКА"
+horizontal_alignment = 1
+
+[node name="Authors2" type="Label" parent="Center/Content" unique_id=105604193]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69411767, 0.6, 0.5686275, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "Nihilore — \"Fuck Voluntary Compliance, Transgress\" (CC BY)"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/Content" unique_id=1896132179]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 
-[node name="MainMenuButton" type="Button" parent="Center/Content"]
+[node name="MainMenuButton" type="Button" parent="Center/Content" unique_id=415890325]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "В ГЛАВНОЕ МЕНЮ"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1960195042]
+stream = ExtResource("5_w3t5n")
+autoplay = true
+bus = &"Music"

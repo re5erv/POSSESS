@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://cehgx3hqe3f1d"]
+
+[ext_resource type="Script" uid="uid://b4j4k88brdtdr" path="res://scripts/end_menu.gd" id="1_xqsby"]
+[ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="2_u32vt"]
+[ext_resource type="AudioStream" uid="uid://b4850ks5jbo8m" path="res://music/4.ogg" id="3_kt5hy"]
+
+[node name="EndMenu" type="Control" unique_id=1324042125]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xqsby")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=98473594]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0, 0, 0.94)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=334088140]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="Center" unique_id=1690197571]
+layout_mode = 2
+theme = ExtResource("2_u32vt")
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Title" type="Label" parent="Center/Content" unique_id=1315629865]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.18431373, 0.14117648, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+text = "УПРАВЛЕНИЕ"
+horizontal_alignment = 1
+
+[node name="AuthorsTitle" type="Label" parent="Center/Content" unique_id=1011290183]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8509804, 0.8039216, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 28
+text = "WASD - Передвижение"
+horizontal_alignment = 1
+
+[node name="AuthorsTitle2" type="Label" parent="Center/Content" unique_id=1450564427]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8509804, 0.8039216, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 28
+text = "ЛКМ - Стрельба"
+horizontal_alignment = 1
+
+[node name="AuthorsTitle3" type="Label" parent="Center/Content" unique_id=1656152466]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8509804, 0.8039216, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 28
+text = "ПКМ - Прыжок"
+horizontal_alignment = 1
+
+[node name="AuthorsTitle4" type="Label" parent="Center/Content" unique_id=119254578]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8509804, 0.8039216, 1)
+theme_override_colors/font_outline_color = Color(0.05882353, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 28
+text = "Колёсико мыши - Камера"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/Content" unique_id=1465899247]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="MainMenuButton" type="Button" parent="Center/Content" unique_id=1397165263]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "В ГЛАВНОЕ МЕНЮ"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2019536870]
+stream = ExtResource("3_kt5hy")
+autoplay = true
+bus = &"Music"

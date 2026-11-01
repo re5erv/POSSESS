@@ -1,8 +1,8 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
-// УМЕНЬШИЛИ ЗНАЧЕНИЕ ПО УМОЛЧАНИЮ
-uniform float aberration_amount : hint_range(0.0, 0.05) = 0.002; 
+// УМЕНЬШИЛИ ЗНАЧЕНИЕ (было 0.002, стало 0.0008)
+uniform float aberration_amount : hint_range(0.0, 0.05) = 0.0008; 
 uniform float contrast : hint_range(0.5, 2.0) = 1.1;
 
 void fragment() {

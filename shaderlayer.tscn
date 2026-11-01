@@ -4,8 +4,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bhunq"]
 shader = ExtResource("1_nwdg7")
-shader_parameter/aberration_amount = 0.005
-shader_parameter/contrast = 1.1
+shader_parameter/aberration_amount = 0.002000000095
+shader_parameter/contrast = 1.1660000316349999
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=868001951]
 layer = 45000
