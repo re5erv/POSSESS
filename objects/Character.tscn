@@ -7,7 +7,9 @@
 [ext_resource type="Script" uid="uid://bd3s4nay21o47" path="res://scripts/DataGun.gd" id="7_4lryg"]
 [ext_resource type="AudioStream" uid="uid://heu4xsvgc4ck" path="res://Sounds/Shoot.wav" id="8_y08ld"]
 [ext_resource type="Script" uid="uid://bnkqht1ultxi" path="res://scripts/holster.gd" id="9_dunks"]
+[ext_resource type="AudioStream" uid="uid://bjfu1ysp4dov7" path="res://Sounds/piercing-male-scream (mp3cut.net).mp3" id="9_gjd8k"]
 [ext_resource type="Texture2D" uid="uid://cpi1tbfcgeb81" path="res://textures/Holster.png" id="10_68atb"]
+[ext_resource type="AudioStream" uid="uid://cwb2v4smcscgf" path="res://Sounds/ff06f71f9cb730c (mp3cut.net).mp3" id="10_qooua"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hyrlu"]
 radius = 6.0
@@ -145,13 +147,13 @@ region = Rect2(0, 600, 60, 60)
 atlas = ExtResource("5_qlg0r")
 region = Rect2(60, 600, 60, 60)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0ay4w"]
-atlas = ExtResource("5_qlg0r")
-region = Rect2(120, 180, 60, 60)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuhu7"]
 atlas = ExtResource("5_qlg0r")
 region = Rect2(180, 180, 60, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ay4w"]
+atlas = ExtResource("5_qlg0r")
+region = Rect2(120, 180, 60, 60)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4c2uj"]
 atlas = ExtResource("5_qlg0r")
@@ -354,10 +356,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0ay4w")
+"texture": SubResource("AtlasTexture_tuhu7")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tuhu7")
+"texture": SubResource("AtlasTexture_0ay4w")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4c2uj")
@@ -610,9 +612,8 @@ shape = SubResource("CapsuleShape2D_hyrlu")
 [node name="Torso" type="AnimatedSprite2D" parent="." unique_id=905244071]
 z_index = 2
 sprite_frames = SubResource("SpriteFrames_bhunq")
-animation = &"Walk"
-frame = 2
-frame_progress = 0.1889225
+animation = &"ShootUzi"
+frame_progress = 0.8177213
 
 [node name="Legs" type="AnimatedSprite2D" parent="Torso" unique_id=927699904]
 z_index = -1
@@ -641,10 +642,18 @@ collide_with_areas = true
 
 [node name="DataGun" type="Node" parent="." unique_id=1240429811]
 script = ExtResource("7_4lryg")
-gun_name = "Uzi"
+gun_name = "Pistol"
 ammo_in_mag = 32
 in_mag_max = 32
 
 [node name="Shoot" type="AudioStreamPlayer2D" parent="." unique_id=2062929472]
 stream = ExtResource("8_y08ld")
+bus = &"Effects"
+
+[node name="ScreamSound" type="AudioStreamPlayer2D" parent="." unique_id=533756508]
+stream = ExtResource("9_gjd8k")
+bus = &"Effects"
+
+[node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=1444676496]
+stream = ExtResource("10_qooua")
 bus = &"Effects"

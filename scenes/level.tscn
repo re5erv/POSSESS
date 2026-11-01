@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cditcctgy00cd" path="res://objects/Character.tscn" id="4_klq6b"]
 [ext_resource type="PackedScene" uid="uid://b8vuu8l7yf4to" path="res://objects/stol.tscn" id="5_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://ngexwrf8dtdq" path="res://objects/flask.tscn" id="6_2r41h"]
+[ext_resource type="AudioStream" uid="uid://b7pqblgskioj4" path="res://music/02.mp3" id="7_klq6b"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b121j"]
 texture = ExtResource("1_mx8sn")
@@ -256,3 +257,9 @@ position = Vector2(65, 75)
 
 [node name="flask4" parent="." unique_id=923641270 instance=ExtResource("6_2r41h")]
 position = Vector2(61, 66)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1519826015]
+stream = ExtResource("7_klq6b")
+volume_db = -3.83
+autoplay = true
+bus = &"Music"
