@@ -16,6 +16,7 @@ border_width_bottom = 4
 border_color = Color(0.7529412, 0.11764706, 0.101960786, 1)
 
 [node name="SettingsMenu" type="CanvasLayer" unique_id=670994761]
+process_mode = 3
 script = ExtResource("1_script")
 
 [node name="Backdrop" type="ColorRect" parent="." unique_id=52927393]

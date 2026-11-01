@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://be8ia400o2l22" path="res://objects/Ohrana.tscn" id="12_64w2a"]
 [ext_resource type="PackedScene" uid="uid://7nadxxliamp1" path="res://objects/Specnaz.tscn" id="13_fpun6"]
 [ext_resource type="PackedScene" uid="uid://2381rvo0puue" path="res://objects/Beta7.tscn" id="14_wc255"]
+[ext_resource type="Script" uid="uid://dwkkxcohfeoyq" path="res://objects/door2.gd" id="15_wc255"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b121j"]
 texture = ExtResource("1_mx8sn")
@@ -1040,3 +1041,6 @@ rotation = 1.5707964
 [node name="Door" parent="Room6" unique_id=592798752 instance=ExtResource("10_8iemx")]
 position = Vector2(512, -1214)
 rotation = 1.5707964
+script = ExtResource("15_wc255")
+end_scene_path = "res://scenes/EndMenu.tscn"
+transition_delay = 1.0

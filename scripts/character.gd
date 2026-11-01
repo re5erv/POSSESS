@@ -402,4 +402,4 @@ func update_animations(move_input):
 
 func pause_menu():
 	get_tree().paused = true
-	add_child(preload("res://ui/PauseMenu.tscn").instantiate())
+	add_child(preload("res://scenes/SettingsMenu.tscn").instantiate())
