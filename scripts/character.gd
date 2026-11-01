@@ -17,6 +17,7 @@ var current_target = null
 @onready var stats = $Stats
 @onready var Torso_sprite = $Torso
 @onready var Legs_sprite = $Torso/Legs
+@onready var Possed_sprite = $Torso/Possed
 @onready var camera = get_node_or_null("Camera2D")
 @onready var shoot_pos = $ShootPos
 @onready var ray_cast = $RayCast2D
@@ -24,23 +25,28 @@ var current_target = null
 @onready var scream_sound = get_node_or_null("ScreamSound")
 @onready var possess_sound = get_node_or_null("PossessSound")
 
+# --- Прелоады ---
 @onready var liner_scene = preload("res://objects/Liner.tscn")
 @onready var specimen_scene = preload("res://objects/specimen.tscn")
+@onready var infection_scene = preload("res://objects/Infection.tscn")
 var bullet_path = preload("res://objects/Bullet.tscn")
 
+# --- Переменные игрока ---
 var time_played = 0.0
 var dead = false
 var shoot_timer = 0.0
 var fire_rate = 0.08
 var is_reloading = false
 var is_empty_sound_playing = false
-var hunger_timer = 0.0
-var hunger_interval = 10.0
 
+# --- Переменные заражения ---
+var last_spawn_pos = Vector2.ZERO
+@export var spawn_distance = 40.0 
+
+# --- Оружие ---
 var current_weapon_type: String = "Uzi"
 var current_ammo_in_mag: int = 32
 var max_ammo_in_mag: int = 32
-
 var is_pistol: bool = false
 
 func _ready():
@@ -52,13 +58,18 @@ func _ready():
 	Torso_sprite.play("LarpUzi")
 	Legs_sprite.play("Larp")
 	
+	if Possed_sprite:
+		Possed_sprite.hide()
+	
 	ray_cast.enabled = true
 	ray_cast.collide_with_areas = true
 	ray_cast.collide_with_bodies = true
 	
 	stats.max_health = 100
 	stats.health = 100
-	stats.hunger = 100
+	
+	# Инициализация заражения
+	last_spawn_pos = global_position
 	
 	if data_gun:
 		current_weapon_type = data_gun.gun_name
@@ -84,6 +95,14 @@ func possess():
 	Torso_sprite.stop()
 	Torso_sprite.play("LarpUzi") 
 	
+	if Possed_sprite:
+		Possed_sprite.show()
+	
+	last_spawn_pos = global_position 
+	var inf = infection_scene.instantiate()
+	inf.global_position = global_position 
+	get_parent().add_child(inf)
+	
 	var cam = get_tree().get_first_node_in_group("main_camera")
 	if cam:
 		cam.reparent(self)
@@ -92,18 +111,13 @@ func possess():
 			cam.snap_to_parent()
 	print("Вселились в ", name)
 
-# --- ФУНКЦИЯ СПРЫГИВАНИЯ ---
-# --- ФУНКЦИЯ СПРЫГИВАНИЯ ---
 func unpossess():
 	if dead: return
 	
-	# 1. Спавним слизня на месте курсора
 	var new_slime = specimen_scene.instantiate()
-	var mouse_world_pos = get_global_mouse_position()
-	new_slime.global_position = mouse_world_pos
+	new_slime.global_position = global_position
 	get_parent().add_child(new_slime)
 	
-	# 2. Перекидываем камеру на слизня
 	var cam = get_tree().get_first_node_in_group("main_camera")
 	if cam:
 		cam.reparent(new_slime)
@@ -111,11 +125,12 @@ func unpossess():
 		if cam.has_method("snap_to_parent"):
 			cam.snap_to_parent()
 	
-	# 3. УБИВАЕМ ЧЕЛОВЕКА (обычная смерть)
+	await get_tree().process_frame
+	if new_slime and new_slime.has_method("start_jump"):
+		new_slime.start_jump()
+	
 	die() 
 	print("Спрыгнули с ", name)
-
-
 
 func _process(_delta):
 	if dead: return
@@ -124,6 +139,18 @@ func _process(_delta):
 	if is_possessed:
 		var mouse_angle = global_position.direction_to(get_global_mouse_position()).angle()
 		rotation = mouse_angle + PI/2.0
+		
+	if is_possessed and Possed_sprite and Torso_sprite:
+		Possed_sprite.frame = Torso_sprite.frame
+		Possed_sprite.speed_scale = Torso_sprite.speed_scale
+		
+		if Possed_sprite.animation != Torso_sprite.animation:
+			Possed_sprite.play(Torso_sprite.animation)
+			
+		if not Torso_sprite.is_playing() and Possed_sprite.is_playing():
+			Possed_sprite.stop()
+		elif Torso_sprite.is_playing() and not Possed_sprite.is_playing():
+			Possed_sprite.play()
 
 func _physics_process(_delta):
 	if dead: return
@@ -137,10 +164,9 @@ func _physics_process(_delta):
 # ЛОГИКА ИГРОКА
 # ==========================================
 func player_logic(_delta):
-	# --- СПРЫГНУТЬ (Пробел или ПКМ) ---
 	if InputMap.has_action("jump") and Input.is_action_just_pressed("jump"):
 		unpossess()
-		return # Выходим, чтобы не двигаться дальше
+		return
 		
 	var move_input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var forward = Vector2.UP.rotated(rotation)
@@ -151,6 +177,17 @@ func player_logic(_delta):
 	
 	update_animations(move_input)
 	
+	# --- СПАВН ЗАРАЖЕНИЯ ПО РАССТОЯНИЮ ---
+	if move_input.length() > 0.1:
+		if global_position.distance_to(last_spawn_pos) >= spawn_distance:
+			last_spawn_pos = global_position
+			var inf = infection_scene.instantiate()
+			inf.global_position = global_position
+			get_parent().add_child(inf)
+	
+	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"):
+		pause_menu()
+		
 	if InputMap.has_action("reload") and Input.is_action_just_pressed("reload") and not is_reloading and current_ammo_in_mag < max_ammo_in_mag:
 		reload()
 		
@@ -180,15 +217,6 @@ func player_logic(_delta):
 						await get_tree().create_timer(0.3).timeout
 						is_empty_sound_playing = false
 						reload()
-				
-	if stats.hunger > 0:
-		hunger_timer += _delta
-		if hunger_timer >= hunger_interval:
-			hunger_timer = 0.0
-			stats.hunger -= 1
-			if stats.hunger <= 0:
-				stats.hunger = 0
-				die()
 
 # ==========================================
 # СТРЕЛЬБА
@@ -344,33 +372,34 @@ func take_damage(dmg, from_enemy = false):
 	update_hp_color()
 	if stats.health <= 0: die(from_enemy)
 
-# ==========================================
-# СМЕРТЬ
-# ==========================================
 func die(from_enemy = false):
 	if dead: return
 	dead = true
 	
-	# ВСЕГДА анимация Dead
+	if Possed_sprite:
+		Possed_sprite.hide()
+	
 	Torso_sprite.play("Dead")
 	Legs_sprite.play("Larp")
 	Torso_sprite.modulate = Color(1, 1, 1)
 	Legs_sprite.modulate = Color(1, 1, 1)
 	velocity = Vector2.ZERO
 	
-	# ПОНИЖАЕМ Z-ИНДЕКС (чтобы труп был под ногами)
 	z_index = 1
+	add_to_group("corpse")
 	
-	# Отключаем коллизию, чтобы труп не мешал
 	var collision = get_node_or_null("CollisionShape2D")
 	if collision: collision.queue_free()
 	
-	# Если убили не враги (игрок), начисляем киллы
 	if not is_possessed and not from_enemy:
 		var humans = get_tree().get_nodes_in_group("enemies")
 		for p in humans:
 			if p.has_method("on_enemy_killed"):
 				p.on_enemy_killed()
+
+func heal(amount):
+	stats.health = min(stats.health + amount, stats.max_health)
+	update_hp_color()
 
 func update_hp_color():
 	var health_percent = float(stats.health) / float(stats.max_health)
@@ -410,3 +439,8 @@ func update_animations(move_input):
 		Torso_sprite.play(torso_anim)
 	if Legs_sprite.animation != legs_anim and Torso_sprite.animation != "Dead" and Torso_sprite.animation != "PossessDead":
 		Legs_sprite.play(legs_anim)
+
+func pause_menu():
+	get_tree().paused = true
+	var pause_ui = preload("res://ui/PauseMenu.tscn").instantiate()
+	add_child(pause_ui)
