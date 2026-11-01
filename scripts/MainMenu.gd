@@ -4,17 +4,60 @@ class_name MainMenu
 # Путь к сцене игрового процесса
 const GAME_SCENE: String = "res://scenes/level.tscn"
 
+# Настройки параллакса за курсором мыши
+@export var buttons_parallax_strength: float = 25.0 # Смещение кнопок (Block 2)
+@export var logo_parallax_strength: float = 12.0    # Смещение логотипа (Block 1)
+@export var follow_speed: float = 5.0              # Скорость сглаживания движения
+
 # Ссылки на узлы интерфейса
 @onready var settings_menu: SettingsMenu = $SettingsMenu
-@onready var buttons: VBoxContainer = $"Block 2/Buttons"
+@onready var buttons: Control = $"Block 2/Buttons"
+@onready var moving_buttons: Control = $"Block 2"
+@onready var moving_logo: Control = $"Block 1"
+
+var _initial_buttons_pos: Vector2 = Vector2.ZERO
+var _initial_logo_pos: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-	# Возвращаем видимый курсор мыши для управления интерфейсом
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	var first_button := buttons.get_child(0) as Button
-	if first_button != null:
-		first_button.grab_focus()
+	
+	if moving_buttons != null:
+		_initial_buttons_pos = moving_buttons.position
+	if moving_logo != null:
+		_initial_logo_pos = moving_logo.position
+	
+	# Поиск и фокусировка на первой доступной кнопке
+	if buttons != null and buttons.get_child_count() > 0:
+		var first_button := buttons.get_child(0) as Button
+		if first_button != null:
+			first_button.grab_focus()
+
+
+func _process(delta: float) -> void:
+	_update_mouse_follow(delta)
+
+
+## Плавное смещение узлов в зависимости от положения мыши
+func _update_mouse_follow(delta: float) -> void:
+	var viewport_size := get_viewport_rect().size
+	var screen_center := viewport_size * 0.5
+	
+	# Нормализованное смещение курсора от центра (-1.0 .. 1.0)
+	var mouse_pos := get_viewport().get_mouse_position()
+	var mouse_offset := (mouse_pos - screen_center) / screen_center
+	mouse_offset.x = clampf(mouse_offset.x, -1.0, 1.0)
+	mouse_offset.y = clampf(mouse_offset.y, -1.0, 1.0)
+	
+	# Движение блока с кнопками
+	if moving_buttons != null:
+		var target_btn_pos := _initial_buttons_pos + (mouse_offset * buttons_parallax_strength)
+		moving_buttons.position = moving_buttons.position.lerp(target_btn_pos, delta * follow_speed)
+	
+	# Движение блока с логотипом
+	if moving_logo != null:
+		var target_logo_pos := _initial_logo_pos + (mouse_offset * logo_parallax_strength)
+		moving_logo.position = moving_logo.position.lerp(target_logo_pos, delta * follow_speed)
 
 
 ## Нажатие кнопки «Новая игра»

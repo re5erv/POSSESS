@@ -121,7 +121,6 @@ text = "ВЫХОД"
 
 [node name="SettingsMenu" parent="." unique_id=710301756 instance=ExtResource("5_8a8k8")]
 unique_name_in_owner = true
-visible = false
 
 [connection signal="pressed" from="Block 2/Buttons/NewGameButton" to="." method="_on_new_game_pressed"]
 [connection signal="pressed" from="Block 2/Buttons/SettingsButton" to="." method="_on_settings_pressed"]
