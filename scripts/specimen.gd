@@ -27,6 +27,12 @@ func _ready():
 	original_collision_mask = collision_mask
 	scale = Vector2(base_scale, base_scale)
 
+func heal(amount):
+	if has_node("Stats"):
+		var stats = get_node("Stats")
+		stats.health = min(stats.health + amount, stats.max_health)
+		print("Слизень вылечен на ", amount)
+		
 func _process(_delta):
 	if dead: return
 	

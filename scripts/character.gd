@@ -3,7 +3,6 @@ extends CharacterBody2D
 @export var move_speed = 120
 @export var is_possessed: bool = false
 
-# --- Переменные ИИ ---
 @export var attack_range = 250
 @export var view_range = 600
 @export var reaction_delay = 0.3
@@ -13,7 +12,6 @@ var ai_reaction_timer = 0.0
 var is_shooting = false
 var current_target = null
 
-# --- Ссылки на узлы ---
 @onready var stats = $Stats
 @onready var Torso_sprite = $Torso
 @onready var Legs_sprite = $Torso/Legs
@@ -25,13 +23,11 @@ var current_target = null
 @onready var scream_sound = get_node_or_null("ScreamSound")
 @onready var possess_sound = get_node_or_null("PossessSound")
 
-# --- Прелоады ---
 @onready var liner_scene = preload("res://objects/Liner.tscn")
 @onready var specimen_scene = preload("res://objects/specimen.tscn")
 @onready var infection_scene = preload("res://objects/Infection.tscn")
 var bullet_path = preload("res://objects/Bullet.tscn")
 
-# --- Переменные игрока ---
 var time_played = 0.0
 var dead = false
 var shoot_timer = 0.0
@@ -39,11 +35,9 @@ var fire_rate = 0.08
 var is_reloading = false
 var is_empty_sound_playing = false
 
-# --- Переменные заражения ---
 var last_spawn_pos = Vector2.ZERO
 @export var spawn_distance = 40.0 
 
-# --- Оружие ---
 var current_weapon_type: String = "Uzi"
 var current_ammo_in_mag: int = 32
 var max_ammo_in_mag: int = 32
@@ -58,8 +52,7 @@ func _ready():
 	Torso_sprite.play("LarpUzi")
 	Legs_sprite.play("Larp")
 	
-	if Possed_sprite:
-		Possed_sprite.hide()
+	if Possed_sprite: Possed_sprite.hide()
 	
 	ray_cast.enabled = true
 	ray_cast.collide_with_areas = true
@@ -67,8 +60,6 @@ func _ready():
 	
 	stats.max_health = 100
 	stats.health = 100
-	
-	# Инициализация заражения
 	last_spawn_pos = global_position
 	
 	if data_gun:
@@ -85,18 +76,14 @@ func _ready():
 func possess():
 	if is_possessed or dead: return
 	is_possessed = true
-	
 	remove_from_group("human")
 	add_to_group("enemies")
 	
 	if scream_sound: scream_sound.play()
 	if possess_sound: possess_sound.play()
 	
-	Torso_sprite.stop()
 	Torso_sprite.play("LarpUzi") 
-	
-	if Possed_sprite:
-		Possed_sprite.show()
+	if Possed_sprite: Possed_sprite.show()
 	
 	last_spawn_pos = global_position 
 	var inf = infection_scene.instantiate()
@@ -106,14 +93,10 @@ func possess():
 	var cam = get_tree().get_first_node_in_group("main_camera")
 	if cam:
 		cam.reparent(self)
-		cam.position = Vector2.ZERO
-		if cam.has_method("snap_to_parent"):
-			cam.snap_to_parent()
-	print("Вселились в ", name)
+		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
 
 func unpossess():
 	if dead: return
-	
 	var new_slime = specimen_scene.instantiate()
 	new_slime.global_position = global_position
 	get_parent().add_child(new_slime)
@@ -121,16 +104,12 @@ func unpossess():
 	var cam = get_tree().get_first_node_in_group("main_camera")
 	if cam:
 		cam.reparent(new_slime)
-		cam.position = Vector2.ZERO
-		if cam.has_method("snap_to_parent"):
-			cam.snap_to_parent()
+		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
 	
 	await get_tree().process_frame
 	if new_slime and new_slime.has_method("start_jump"):
 		new_slime.start_jump()
-	
-	die() 
-	print("Спрыгнули с ", name)
+	die()
 
 func _process(_delta):
 	if dead: return
@@ -143,26 +122,14 @@ func _process(_delta):
 	if is_possessed and Possed_sprite and Torso_sprite:
 		Possed_sprite.frame = Torso_sprite.frame
 		Possed_sprite.speed_scale = Torso_sprite.speed_scale
-		
 		if Possed_sprite.animation != Torso_sprite.animation:
 			Possed_sprite.play(Torso_sprite.animation)
-			
-		if not Torso_sprite.is_playing() and Possed_sprite.is_playing():
-			Possed_sprite.stop()
-		elif Torso_sprite.is_playing() and not Possed_sprite.is_playing():
-			Possed_sprite.play()
 
 func _physics_process(_delta):
 	if dead: return
-	
-	if is_possessed:
-		player_logic(_delta)
-	else:
-		enemy_ai_logic(_delta)
+	if is_possessed: player_logic(_delta)
+	else: enemy_ai_logic(_delta)
 
-# ==========================================
-# ЛОГИКА ИГРОКА
-# ==========================================
 func player_logic(_delta):
 	if InputMap.has_action("jump") and Input.is_action_just_pressed("jump"):
 		unpossess()
@@ -171,13 +138,10 @@ func player_logic(_delta):
 	var move_input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var forward = Vector2.UP.rotated(rotation)
 	var final_dir = forward * -move_input.y + forward.rotated(PI/2.0) * move_input.x
-	
 	velocity = final_dir * move_speed
 	move_and_slide()
-	
 	update_animations(move_input)
 	
-	# --- СПАВН ЗАРАЖЕНИЯ ПО РАССТОЯНИЮ ---
 	if move_input.length() > 0.1:
 		if global_position.distance_to(last_spawn_pos) >= spawn_distance:
 			last_spawn_pos = global_position
@@ -185,17 +149,13 @@ func player_logic(_delta):
 			inf.global_position = global_position
 			get_parent().add_child(inf)
 	
-	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"):
-		pause_menu()
-		
-	if InputMap.has_action("reload") and Input.is_action_just_pressed("reload") and not is_reloading and current_ammo_in_mag < max_ammo_in_mag:
-		reload()
+	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"): pause_menu()
+	if InputMap.has_action("reload") and Input.is_action_just_pressed("reload") and not is_reloading and current_ammo_in_mag < max_ammo_in_mag: reload()
 		
 	if InputMap.has_action("shoot") and not is_reloading:
 		if is_pistol:
 			if Input.is_action_just_pressed("shoot"):
-				if current_ammo_in_mag > 0:
-					shoot_nigg()
+				if current_ammo_in_mag > 0: shoot_nigg()
 				else:
 					if not is_empty_sound_playing:
 						is_empty_sound_playing = true
@@ -218,16 +178,11 @@ func player_logic(_delta):
 						is_empty_sound_playing = false
 						reload()
 
-# ==========================================
-# СТРЕЛЬБА
-# ==========================================
 func shoot_nigg():
 	if current_ammo_in_mag <= 0: return
 	current_ammo_in_mag -= 1
-	
 	var liner = liner_scene.instantiate()
-	var spawn_offset = Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(rotation)
-	liner.global_position = global_position + spawn_offset
+	liner.global_position = global_position + Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(rotation)
 	liner.rotation = randf_range(-PI, PI)
 	get_parent().add_child(liner)
 	
@@ -238,14 +193,12 @@ func shoot_nigg():
 	
 	Torso_sprite.play("ShootUzi")
 	$Shoot.play()
-	
 	if is_pistol:
 		await get_tree().create_timer(0.15).timeout
 		Torso_sprite.play("LarpUzi")
 	else:
 		await get_tree().create_timer(0.1).timeout
-		if not Input.is_action_pressed("shoot"):
-			Torso_sprite.play("LarpUzi")
+		if not Input.is_action_pressed("shoot"): Torso_sprite.play("LarpUzi")
 
 func reload():
 	if is_reloading: return
@@ -256,116 +209,66 @@ func reload():
 	is_reloading = false
 	Torso_sprite.play("LarpUzi")
 
-# ==========================================
-# УМНЫЙ ИИ
-# ==========================================
 func enemy_ai_logic(delta):
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	var visible_target = null
 	var visible_target_dist = attack_range
 	
 	for enemy in enemies:
-		if enemy == self: continue
-		if "dead" in enemy and enemy.dead: continue
-			
+		if enemy == self or ("dead" in enemy and enemy.dead): continue
 		var dist = global_position.distance_to(enemy.global_position)
-		var enemy_visible = false
-		
 		if dist < view_range:
 			ray_cast.target_position = to_local(enemy.global_position)
 			ray_cast.force_raycast_update()
 			if ray_cast.is_colliding():
-				var collider = ray_cast.get_collider()
-				if collider == enemy or collider.is_in_group("enemies"):
-					enemy_visible = true
-			else:
-				enemy_visible = true
-		
-		if enemy_visible and dist < visible_target_dist:
-			visible_target_dist = dist
-			visible_target = enemy
+				if ray_cast.get_collider() == enemy or ray_cast.get_collider().is_in_group("enemies"): visible_target = enemy
+			else: visible_target = enemy
+			if visible_target: visible_target_dist = dist
 	
 	if not visible_target:
-		current_target = null
-		if Torso_sprite.animation != "ShootUzi" and Torso_sprite.animation != "ReloadUzi":
-			Torso_sprite.play("LarpUzi")
+		Torso_sprite.play("LarpUzi")
 		Legs_sprite.play("Larp")
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 	
-	if visible_target != current_target:
-		current_target = visible_target
-	
-	var target_dir = global_position.direction_to(visible_target.global_position)
-	rotation = target_dir.angle() + PI/2.0
-	
-	if ai_is_reloading:
-		velocity = Vector2.ZERO
-		move_and_slide()
-		return
+	rotation = global_position.direction_to(visible_target.global_position).angle() + PI/2.0
+	if ai_is_reloading: return
 	
 	if visible_target_dist < attack_range:
 		ai_reaction_timer += delta
 		if ai_reaction_timer >= reaction_delay:
 			shoot_timer += delta
-			
 			if shoot_timer >= fire_rate:
 				shoot_timer = 0.0
 				enemy_shoot()
-			elif current_ammo_in_mag <= 0:
-				enemy_reload()
-			else:
-				if not is_shooting:
-					Torso_sprite.play("LarpUzi")
-	else:
-		ai_reaction_timer = 0.0
-		if Torso_sprite.animation != "ShootUzi":
-			Torso_sprite.play("LarpUzi")
-		velocity = Vector2.ZERO
-		move_and_slide()
+			elif current_ammo_in_mag <= 0: enemy_reload()
 
 func enemy_shoot():
 	if current_ammo_in_mag <= 0: return
 	current_ammo_in_mag -= 1
-	
 	Torso_sprite.play("ShootUzi")
 	$Shoot.play()
 	is_shooting = true
-	
-	var liner = liner_scene.instantiate()
-	var spawn_offset = Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(rotation)
-	liner.global_position = global_position + spawn_offset
-	liner.rotation = randf_range(-PI, PI)
-	get_parent().add_child(liner)
-	
 	var bullet = bullet_path.instantiate()
 	bullet.visible = true
 	bullet.pos = shoot_pos.global_position
 	bullet.dir = rotation
 	bullet.enemy_bullet = true  
 	get_parent().add_child(bullet)
-	
 	await get_tree().create_timer(0.1).timeout
-	if not is_reloading:
-		Torso_sprite.play("LarpUzi")
+	if not is_reloading: Torso_sprite.play("LarpUzi")
 	is_shooting = false
 
 func enemy_reload():
 	if ai_is_reloading: return
 	ai_is_reloading = true
-	if is_shooting:
-		is_shooting = false
-		Torso_sprite.play("LarpUzi")
 	Torso_sprite.play("ReloadUzi")
 	await Torso_sprite.animation_finished
 	current_ammo_in_mag = max_ammo_in_mag
 	ai_is_reloading = false
 	Torso_sprite.play("LarpUzi")
 
-# ==========================================
-# СМЕРТЬ И АНИМАЦИИ
-# ==========================================
 func take_damage(dmg, from_enemy = false):
 	if dead: return
 	stats.health -= dmg
@@ -375,31 +278,24 @@ func take_damage(dmg, from_enemy = false):
 func die(from_enemy = false):
 	if dead: return
 	dead = true
+	is_possessed = false # <--- ВАЖНО: больше не заражен
+	remove_from_group("enemies") # <--- Убираем из врагов, чтобы не лечился
 	
-	if Possed_sprite:
-		Possed_sprite.hide()
-	
+	if Possed_sprite: Possed_sprite.hide()
 	Torso_sprite.play("Dead")
 	Legs_sprite.play("Larp")
 	Torso_sprite.modulate = Color(1, 1, 1)
 	Legs_sprite.modulate = Color(1, 1, 1)
 	velocity = Vector2.ZERO
-	
 	z_index = 1
 	add_to_group("corpse")
 	
-	var collision = get_node_or_null("CollisionShape2D")
-	if collision: collision.queue_free()
+	var col = get_node_or_null("CollisionShape2D")
+	if col: col.queue_free() # Проходимость
 	
 	if not is_possessed and not from_enemy:
-		var humans = get_tree().get_nodes_in_group("enemies")
-		for p in humans:
-			if p.has_method("on_enemy_killed"):
-				p.on_enemy_killed()
-
-func heal(amount):
-	stats.health = min(stats.health + amount, stats.max_health)
-	update_hp_color()
+		for p in get_tree().get_nodes_in_group("enemies"):
+			if p.has_method("on_enemy_killed"): p.on_enemy_killed()
 
 func update_hp_color():
 	var health_percent = float(stats.health) / float(stats.max_health)
@@ -408,11 +304,7 @@ func update_hp_color():
 	Legs_sprite.modulate = Color(1.0, 1.0 - red_intensity * 0.5, 1.0 - red_intensity * 0.5)
 
 func update_animations(move_input):
-	if dead: return
-	
-	if is_shooting or Torso_sprite.animation == "ReloadUzi":
-		return
-		
+	if dead or is_shooting or Torso_sprite.animation == "ReloadUzi": return
 	var is_moving = move_input.length() > 0.1
 	var is_left = move_input.x < -0.1
 	var is_right = move_input.x > 0.1
@@ -421,26 +313,19 @@ func update_animations(move_input):
 	
 	var torso_anim = "LarpUzi"
 	var legs_anim = "Larp"
-	
 	if is_moving:
 		if is_left or is_right: torso_anim = "LarpUzi"
 		else: torso_anim = "Uzi"
-		
 		if is_forward or is_backward: legs_anim = "Walk"
 		elif is_left: legs_anim = "CrabLeft"
 		elif is_right: legs_anim = "CrabRight"
 		else: legs_anim = "Walk"
-	else:
-		torso_anim = "LarpUzi"
-		legs_anim = "Larp"
 	
-	var protected_anims = ["ShootUzi", "ReloadUzi", "EmptyUzi", "Dead", "PossessDead"]
-	if Torso_sprite.animation != torso_anim and not Torso_sprite.animation in protected_anims:
+	if Torso_sprite.animation != torso_anim and not Torso_sprite.animation in ["ShootUzi", "ReloadUzi", "EmptyUzi", "Dead"]:
 		Torso_sprite.play(torso_anim)
-	if Legs_sprite.animation != legs_anim and Torso_sprite.animation != "Dead" and Torso_sprite.animation != "PossessDead":
+	if Legs_sprite.animation != legs_anim and Torso_sprite.animation != "Dead":
 		Legs_sprite.play(legs_anim)
 
 func pause_menu():
 	get_tree().paused = true
-	var pause_ui = preload("res://ui/PauseMenu.tscn").instantiate()
-	add_child(pause_ui)
+	add_child(preload("res://ui/PauseMenu.tscn").instantiate())
