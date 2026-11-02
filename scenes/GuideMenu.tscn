@@ -3,6 +3,13 @@
 [ext_resource type="Script" uid="uid://b4j4k88brdtdr" path="res://scripts/end_menu.gd" id="1_xqsby"]
 [ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="2_u32vt"]
 [ext_resource type="AudioStream" uid="uid://b4850ks5jbo8m" path="res://music/4.ogg" id="3_kt5hy"]
+[ext_resource type="Shader" uid="uid://crira574vc51n" path="res://scenes/MainMenu.gdshader" id="4_xqsby"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xqsby"]
+shader = ExtResource("4_xqsby")
+shader_parameter/speed = 0.5
+shader_parameter/pulse_intensity = 0.15
+shader_parameter/alpha = 0.278000013205
 
 [node name="EndMenu" type="Control" unique_id=1324042125]
 layout_mode = 3
@@ -96,3 +103,13 @@ text = "В ГЛАВНОЕ МЕНЮ"
 stream = ExtResource("3_kt5hy")
 autoplay = true
 bus = &"Music"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=895421195]
+material = SubResource("ShaderMaterial_xqsby")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
