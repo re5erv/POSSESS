@@ -31,6 +31,8 @@ func _ready():
 	if stats:
 		stats.max_health = 100
 		stats.health = 100
+	else:
+		print("ОШИБКА: У слизи нет узла Stats!")
 
 func _process(_delta):
 	if dead: return
@@ -58,11 +60,9 @@ func _process(_delta):
 func _physics_process(_delta):
 	if dead or is_jumping: return
 	
-	# --- ВЫЗОВ МЕНЮ ПАУЗЫ ---
 	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"):
 		pause_menu()
 		return
-	# --------------------------
 	
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
@@ -120,6 +120,9 @@ func possess_target(target):
 	target.possess()
 	queue_free()
 
+# ==========================================
+# УРОН И СМЕРТЬ
+# ==========================================
 func take_damage(dmg, _from_enemy = false):
 	if dead: return
 	if stats:
@@ -127,10 +130,9 @@ func take_damage(dmg, _from_enemy = false):
 		print("Слизень получил урон! ХП: ", stats.health)
 		if stats.health <= 0:
 			die()
+	else:
+		print("Слизень не может получить урон: нет Stats!")
 
-# ==========================================
-# СМЕРТЬ С ГЕНЕРАЦИЕЙ ЭКРАНА
-# ==========================================
 func die():
 	if dead: return
 	dead = true
@@ -162,9 +164,7 @@ func die():
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	label.add_theme_color_override("font_color", Color.RED)
-	
-	# УМЕНЬШИЛИ ШРИФТ В 2 РАЗА (было 128)
-	label.add_theme_font_size_override("font_size", 64) 
+	label.add_theme_font_size_override("font_size", 64)
 	
 	var font = load("res://determination.otf")
 	if font: label.add_theme_font_override("font", font)
@@ -188,19 +188,9 @@ func die():
 	get_tree().reload_current_scene()
 
 func pause_menu():
-	# Ставим игру на паузу
 	get_tree().paused = true
-	
-	# Загружаем сцену меню
 	var pause_scene = preload("res://ui/PauseMenu.tscn")
 	var pause_ui = pause_scene.instantiate()
-	
-	# ВАЖНО: Добавляем в корень игры, а не к персонажу!
 	get_tree().root.add_child(pause_ui)
-	
-	# На всякий случай делаем его видимым (если в сцене стоит visible = false)
-	if pause_ui is CanvasLayer or pause_ui is Control:
-		pause_ui.visible = true
-		
-	# Включаем игнорирование паузы для самого меню, чтобы кнопки работали
+	if pause_ui is CanvasLayer or pause_ui is Control: pause_ui.visible = true
 	pause_ui.process_mode = Node.PROCESS_MODE_ALWAYS

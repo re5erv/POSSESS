@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://heu4xsvgc4ck" path="res://Sounds/Shoot.wav" id="9_n1tul"]
 [ext_resource type="AudioStream" uid="uid://bjfu1ysp4dov7" path="res://Sounds/piercing-male-scream (mp3cut.net).mp3" id="10_4o7yf"]
 [ext_resource type="AudioStream" uid="uid://cwb2v4smcscgf" path="res://Sounds/ff06f71f9cb730c (mp3cut.net).mp3" id="11_r025b"]
+[ext_resource type="AudioStream" uid="uid://dmt0m5ouw1viq" path="res://Sounds/UziReload.mp3" id="12_o0fc3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hyrlu"]
 radius = 6.0
@@ -226,13 +227,18 @@ bus = &"SFX"
 stream = ExtResource("10_4o7yf")
 bus = &"SFX"
 
-[node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=1444676496]
-stream = ExtResource("11_r025b")
-bus = &"SFX"
-
 [node name="Area2D" type="Area2D" parent="." unique_id=1764370096]
 collision_layer = 16
 collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=338963472]
 shape = SubResource("CircleShape2D_bhunq")
+
+[node name="Reload" type="AudioStreamPlayer2D" parent="." unique_id=64646528]
+stream = ExtResource("12_o0fc3")
+bus = &"SFX"
+
+[node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=69573713]
+stream = ExtResource("11_r025b")
+volume_db = 2.916
+bus = &"SFX"

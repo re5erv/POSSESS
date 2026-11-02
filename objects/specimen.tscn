@@ -121,6 +121,7 @@ height = 10.0
 
 [node name="Specimen" type="CharacterBody2D" unique_id=37663945 groups=["enemies"]]
 z_index = 7
+collision_layer = 2
 collision_mask = 7
 script = ExtResource("1_s1rbj")
 
@@ -144,4 +145,5 @@ max_health = 40
 
 [node name="PossessSound" type="AudioStreamPlayer2D" parent="." unique_id=538523408]
 stream = ExtResource("4_inf8p")
+volume_db = 2.916
 bus = &"SFX"

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bp8tp4kajn1og"]
+
+[ext_resource type="Script" uid="uid://8k4bic7wdwlj" path="res://menu_wrapper.gd" id="1_qeqgj"]
+[ext_resource type="AudioStream" uid="uid://b1pmhd473vr82" path="res://Sounds/cassette-player-button (mp3cut.net) (1).mp3" id="2_qeqgj"]
+[ext_resource type="AudioStream" uid="uid://ccfad8hud22o6" path="res://Sounds/pressing-a-button-on-a-ballpoint-pen-on-the-table (mp3cut.net).mp3" id="3_13ncg"]
+
+[node name="MenuWrapper" type="Control" unique_id=687064180]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qeqgj")
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=1894825508]
+process_mode = 3
+stream = ExtResource("2_qeqgj")
+volume_db = 4.843
+bus = &"SFX"
+
+[node name="TickSound" type="AudioStreamPlayer" parent="." unique_id=3675945]
+process_mode = 3
+stream = ExtResource("3_13ncg")
+volume_db = 2.259
+bus = &"SFX"

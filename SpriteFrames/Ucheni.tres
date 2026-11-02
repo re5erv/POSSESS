@@ -1,7 +1,7 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://b24rbab8vffgm"]
 
 [ext_resource type="Texture2D" uid="uid://bhfrl2whyrexn" path="res://textures/BarWhite.png" id="1_barwhite"]
-[ext_resource type="Texture2D" uid="uid://ce3vurvbqegxw" path="res://textures/DeadRC.png" id="2_dwgt5"]
+[ext_resource type="Texture2D" uid="uid://ddprbyfgi0xwl" path="res://textures/DeadUc.png" id="2_dwgt5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gv3ub"]
 atlas = ExtResource("1_barwhite")
@@ -11,7 +11,7 @@ region = Rect2(120, 540, 60, 60)
 atlas = ExtResource("1_barwhite")
 region = Rect2(180, 540, 60, 60)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_voqfc"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jttqd"]
 atlas = ExtResource("2_dwgt5")
 region = Rect2(0, 0, 28, 40)
 
@@ -200,7 +200,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_voqfc")
+"texture": SubResource("AtlasTexture_jttqd")
 }],
 "loop": 1,
 "name": &"Dead",

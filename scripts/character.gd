@@ -24,20 +24,18 @@ var current_target = null
 @onready var data_gun = get_node_or_null("DataGun")
 @onready var scream_sound = get_node_or_null("ScreamSound")
 @onready var possess_sound = get_node_or_null("PossessSound")
+@onready var reload_sound = get_node_or_null("Reload")
 
-# --- Прелоады ---
 @onready var liner_scene = preload("res://objects/Liner.tscn")
 @onready var specimen_scene = preload("res://objects/specimen.tscn")
 @onready var infection_scene = preload("res://objects/Infection.tscn")
 var bullet_path = preload("res://objects/Bullet.tscn")
 
-# --- Эволюция ---
 var poss1_frames = preload("res://SpriteFrames/Poss1.tres")
 var poss2_frames = preload("res://SpriteFrames/Poss2.tres")
 var poss3_frames = preload("res://SpriteFrames/Poss3.tres")
 var current_evolution_level = 1
 
-# --- Переменные игрока ---
 var time_played = 0.0
 var dead = false
 var shoot_timer = 0.0
@@ -45,15 +43,13 @@ var fire_rate = 0.08
 var is_reloading = false
 var is_empty_sound_playing = false
 
-# --- Заражение ---
 var last_spawn_pos = Vector2.ZERO
 @export var spawn_distance = 40.0 
 
-# --- Оружие ---
 var current_weapon_type: String = "Uzi"
-var current_ammo_in_mag: int = 32
 var max_ammo_in_mag: int = 32
 var is_pistol: bool = false
+var damage_multiplier = 2.0 
 
 func _ready():
 	if is_possessed:
@@ -79,7 +75,8 @@ func _ready():
 	if data_gun:
 		current_weapon_type = data_gun.gun_name
 		max_ammo_in_mag = data_gun.in_mag_max
-		current_ammo_in_mag = max_ammo_in_mag
+		if data_gun.ammo_in_mag <= 0:
+			data_gun.ammo_in_mag = max_ammo_in_mag
 		
 		if current_weapon_type == "Pistol":
 			fire_rate = 0.5 
@@ -109,17 +106,12 @@ func possess():
 		cam.reparent(self)
 		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
 
-# ==========================================
-# ИСПРАВЛЕННЫЕ ФУНКЦИИ СПРЫГИВАНИЯ
-# ==========================================
 func unpossess():
 	if dead: return
-	# Откладываем выполнение на конец кадра
 	_do_unpossess.call_deferred()
 
 func _do_unpossess():
 	if dead: return
-	
 	var new_slime = specimen_scene.instantiate()
 	new_slime.global_position = global_position
 	get_parent().add_child(new_slime)
@@ -132,17 +124,14 @@ func _do_unpossess():
 	await get_tree().process_frame
 	if new_slime and new_slime.has_method("start_jump"):
 		new_slime.start_jump()
-	
 	die(true)
 
 func force_unpossess():
 	if dead: return
-	# Откладываем выполнение на конец кадра
 	_do_force_unpossess.call_deferred()
 
 func _do_force_unpossess():
 	if dead: return
-	
 	var new_slime = specimen_scene.instantiate()
 	new_slime.global_position = global_position
 	get_parent().add_child(new_slime)
@@ -151,30 +140,32 @@ func _do_force_unpossess():
 	if cam:
 		cam.reparent(new_slime)
 		if cam.has_method("snap_to_parent"): cam.snap_to_parent()
-	
 	die(true)
 
 func _process(_delta):
-	if dead: return
+	if dead: return # ЗАЩИТА
+	
 	time_played += _delta
 	
 	if is_possessed:
 		var mouse_angle = global_position.direction_to(get_global_mouse_position()).angle()
-		Torso_sprite.global_rotation = mouse_angle + PI/2.0
+		rotation = mouse_angle + PI/2.0
 		
 		if Possed_sprite:
-			Possed_sprite.global_rotation = Torso_sprite.global_rotation
 			Possed_sprite.frame = Torso_sprite.frame
 			Possed_sprite.speed_scale = Torso_sprite.speed_scale
 			if Possed_sprite.animation != Torso_sprite.animation:
 				Possed_sprite.play(Torso_sprite.animation)
 
 func _physics_process(_delta):
-	if dead: return
+	if dead: return # ЗАЩИТА
+	
 	if is_possessed: player_logic(_delta)
 	else: enemy_ai_logic(_delta)
 
 func player_logic(_delta):
+	if dead: return # ЗАЩИТА
+	
 	if InputMap.has_action("jump") and Input.is_action_just_pressed("jump"):
 		unpossess()
 		return
@@ -197,12 +188,15 @@ func player_logic(_delta):
 			get_parent().add_child(inf)
 	
 	if InputMap.has_action("exit") and Input.is_action_just_pressed("exit"): pause_menu()
-	if InputMap.has_action("reload") and Input.is_action_just_pressed("reload") and not is_reloading and current_ammo_in_mag < max_ammo_in_mag: reload()
+	
+	if InputMap.has_action("reload") and Input.is_action_just_pressed("reload") and not is_reloading:
+		if data_gun and data_gun.ammo_in_mag < data_gun.in_mag_max:
+			reload()
 		
 	if InputMap.has_action("shoot") and not is_reloading:
 		if is_pistol:
 			if Input.is_action_just_pressed("shoot"):
-				if current_ammo_in_mag > 0: shoot_nigg()
+				if data_gun and data_gun.ammo_in_mag > 0: shoot_nigg()
 				else:
 					if not is_empty_sound_playing:
 						is_empty_sound_playing = true
@@ -212,7 +206,7 @@ func player_logic(_delta):
 						reload()
 		else:
 			if Input.is_action_pressed("shoot"):
-				if current_ammo_in_mag > 0:
+				if data_gun and data_gun.ammo_in_mag > 0:
 					shoot_timer += _delta
 					if shoot_timer >= fire_rate:
 						shoot_timer = 0.0
@@ -226,16 +220,20 @@ func player_logic(_delta):
 						reload()
 
 func shoot_nigg():
-	if current_ammo_in_mag <= 0: return
-	current_ammo_in_mag -= 1
+	if dead: return # ЗАЩИТА
+	if not data_gun or data_gun.ammo_in_mag <= 0: return
+	data_gun.ammo_in_mag -= 1 
+	
 	var liner = liner_scene.instantiate()
-	liner.global_position = global_position + Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(Torso_sprite.global_rotation)
+	liner.global_position = global_position + Vector2(randf_range(8, 16), randf_range(-10, -20)).rotated(rotation)
 	liner.rotation = randf_range(-PI, PI)
 	get_parent().add_child(liner)
 	
 	var bullet = bullet_path.instantiate()
-	bullet.dir = Torso_sprite.global_rotation
+	bullet.dir = rotation 
 	bullet.pos = shoot_pos.global_position
+	if "damage" in bullet:
+		bullet.damage *= damage_multiplier
 	get_parent().add_child(bullet)
 	
 	Torso_sprite.play("ShootUzi")
@@ -248,15 +246,35 @@ func shoot_nigg():
 		if not Input.is_action_pressed("shoot"): Torso_sprite.play("LarpUzi")
 
 func reload():
+	if dead: return # ЗАЩИТА
 	if is_reloading: return
+	if not data_gun: return
+	
 	is_reloading = true
 	Torso_sprite.play("ReloadUzi")
+	
+	if reload_sound: reload_sound.play()
+	
 	await Torso_sprite.animation_finished
-	current_ammo_in_mag = max_ammo_in_mag
+	data_gun.ammo_in_mag = data_gun.in_mag_max
 	is_reloading = false
 	Torso_sprite.play("LarpUzi")
 
+# ==========================================
+# УМНЫЙ ИИ
+# ==========================================
 func enemy_ai_logic(delta):
+	if dead: return # ЗАЩИТА
+	
+	if ai_is_reloading:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return 
+	
+	if data_gun and data_gun.ammo_in_mag <= 0:
+		enemy_reload()
+		return
+	
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	var visible_target = null
 	var visible_target_dist = attack_range
@@ -273,16 +291,14 @@ func enemy_ai_logic(delta):
 			if visible_target: visible_target_dist = dist
 	
 	if not visible_target:
-		Torso_sprite.play("LarpUzi")
+		if not ai_is_reloading and Torso_sprite.animation != "Dead":
+			Torso_sprite.play("LarpUzi")
 		Legs_sprite.play("Larp")
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 	
 	rotation = global_position.direction_to(visible_target.global_position).angle() + PI/2.0
-	Torso_sprite.global_rotation = rotation
-	
-	if ai_is_reloading: return
 	
 	if visible_target_dist < attack_range:
 		ai_reaction_timer += delta
@@ -291,40 +307,65 @@ func enemy_ai_logic(delta):
 			if shoot_timer >= fire_rate:
 				shoot_timer = 0.0
 				enemy_shoot()
-			elif current_ammo_in_mag <= 0: enemy_reload()
 
 func enemy_shoot():
-	if current_ammo_in_mag <= 0: return
-	current_ammo_in_mag -= 1
+	if dead: return # ЗАЩИТА
+	if not data_gun or data_gun.ammo_in_mag <= 0: return
+	if ai_is_reloading: return 
+	
+	data_gun.ammo_in_mag -= 1 
+	
 	Torso_sprite.play("ShootUzi")
 	$Shoot.play()
 	is_shooting = true
+	
 	var bullet = bullet_path.instantiate()
 	bullet.visible = true
 	bullet.pos = shoot_pos.global_position
 	bullet.dir = rotation
 	bullet.enemy_bullet = true  
 	get_parent().add_child(bullet)
+	
 	await get_tree().create_timer(0.1).timeout
-	if not is_reloading: Torso_sprite.play("LarpUzi")
+	if not is_reloading and not ai_is_reloading and Torso_sprite.animation != "Dead": 
+		Torso_sprite.play("LarpUzi")
 	is_shooting = false
 
 func enemy_reload():
+	if dead: return # ЗАЩИТА
 	if ai_is_reloading: return
+	if not data_gun: return
+	
 	ai_is_reloading = true
-	Torso_sprite.play("ReloadUzi")
-	await Torso_sprite.animation_finished
-	current_ammo_in_mag = max_ammo_in_mag
+	print("НПС: Начал перезарядку. Патронов: ", data_gun.ammo_in_mag)
+	
+	if is_shooting:
+		is_shooting = false
+	
+	if Torso_sprite.animation != "Dead":
+		Torso_sprite.play("ReloadUzi")
+	
+	if reload_sound:
+		reload_sound.play()
+	
+	await get_tree().create_timer(1.5).timeout
+	
+	data_gun.ammo_in_mag = data_gun.in_mag_max 
+	print("НПС: Перезарядка завершена. Патронов: ", data_gun.ammo_in_mag)
+	
 	ai_is_reloading = false
-	Torso_sprite.play("LarpUzi")
+	if Torso_sprite.animation != "Dead":
+		Torso_sprite.play("LarpUzi")
 
+# ==========================================
+# СМЕРТЬ И ЛЕЧЕНИЕ
+# ==========================================
 func take_damage(dmg, from_enemy = false):
 	if dead: return
 	if is_possessed:
 		stats.health -= dmg
 		update_hp_color()
-		if stats.health <= 0:
-			force_unpossess()
+		if stats.health <= 0: force_unpossess()
 		return
 	stats.health -= dmg
 	update_hp_color()
@@ -333,10 +374,16 @@ func take_damage(dmg, from_enemy = false):
 func die(from_enemy = false):
 	if dead: return
 	dead = true
+	
+	set_physics_process(false)
+	set_process(false)
+	
 	is_possessed = false 
 	remove_from_group("enemies") 
 	
 	if Possed_sprite: Possed_sprite.hide()
+	
+	# Принудительно включаем анимацию смерти
 	Torso_sprite.play("Dead")
 	Legs_sprite.play("Larp")
 	Torso_sprite.modulate = Color(1, 1, 1)
@@ -353,8 +400,21 @@ func die(from_enemy = false):
 	if not from_enemy:
 		for p in get_tree().get_nodes_in_group("enemies"):
 			if p.has_method("on_enemy_killed"): p.on_enemy_killed()
+	
+	# --- СТРАХОВОЧНАЯ ПРОВЕРКА ЧЕРЕЗ 0.2 СЕКУНДЫ ---
+	# Это защитит от багов, если кто-то вызовет LarpUzi в том же кадре
+	await get_tree().create_timer(0.2).timeout
+	
+	# Если мы все еще мертвы (а мы мертвы), принудительно ставим Dead
+	if dead:
+		if Torso_sprite:
+			Torso_sprite.play("Dead")
+		if Legs_sprite:
+			Legs_sprite.play("Larp")
+	# ------------------------------------------------
 
 func heal(amount):
+	if dead: return # МЕРТВЫХ НЕ ЛЕЧИМ
 	stats.health += amount
 	update_hp_color()
 	
@@ -372,9 +432,17 @@ func update_hp_color():
 	Legs_sprite.modulate = Color(1.0, 1.0 - red_intensity * 0.5, 1.0 - red_intensity * 0.5)
 
 func update_animations(move_input):
-	if dead: return
+	if dead: return # ЗАЩИТА
 	
-	if not (is_shooting or Torso_sprite.animation == "ReloadUzi"):
+	# --- ЖЕСТКАЯ БЛОКИРОВКА DEAD ---
+	# Если анимация Dead, мы вообще ничего не трогаем
+	if Torso_sprite.animation == "Dead":
+		return
+	# --------------------------------
+	
+	if is_reloading or ai_is_reloading:
+		pass 
+	elif not (is_shooting or Torso_sprite.animation == "ReloadUzi"):
 		var torso_anim = "LarpUzi"
 		if move_input.length() > 0.1:
 			if abs(move_input.x) > 0.1: torso_anim = "LarpUzi"
@@ -383,16 +451,25 @@ func update_animations(move_input):
 		if Torso_sprite.animation != torso_anim and not Torso_sprite.animation in ["ShootUzi", "ReloadUzi", "EmptyUzi", "Dead"]:
 			Torso_sprite.play(torso_anim)
 	
-	var legs_anim = "Larp"
 	if move_input.length() > 0.1:
-		if move_input.y < -0.1: legs_anim = "Walk"
-		elif move_input.y > 0.1: legs_anim = "Walk"
-		elif move_input.x < -0.1: legs_anim = "CrabLeft"
-		elif move_input.x > 0.1: legs_anim = "CrabRight"
-		else: legs_anim = "Walk"
+		var move_angle = move_input.angle()
+		var look_angle = rotation - PI/2.0
+		var angle_diff = wrapf(move_angle - look_angle, -PI, PI)
 		
-	if Legs_sprite.animation != legs_anim and Torso_sprite.animation != "Dead":
-		Legs_sprite.play(legs_anim)
+		if abs(angle_diff) > 1.3:
+			Legs_sprite.rotation = 0
+			Legs_sprite.speed_scale = -1.0
+		else:
+			Legs_sprite.rotation = angle_diff
+			Legs_sprite.speed_scale = 1.0
+			
+		if Legs_sprite.animation != "Walk" and Torso_sprite.animation != "Dead":
+			Legs_sprite.play("Walk")
+	else:
+		Legs_sprite.rotation = 0
+		Legs_sprite.speed_scale = 1.0
+		if Legs_sprite.animation != "Larp" and Torso_sprite.animation != "Dead":
+			Legs_sprite.play("Larp")
 
 func pause_menu():
 	get_tree().paused = true

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b1pmhd473vr82"
+path="res://.godot/imported/cassette-player-button (mp3cut.net) (1).mp3-611c40f30b9f0fdd43900b559cab7764.mp3str"
+
+[deps]
+
+source_file="res://Sounds/cassette-player-button (mp3cut.net) (1).mp3"
+dest_files=["res://.godot/imported/cassette-player-button (mp3cut.net) (1).mp3-611c40f30b9f0fdd43900b559cab7764.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

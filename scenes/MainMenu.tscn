@@ -4,9 +4,17 @@
 [ext_resource type="Shader" uid="uid://cg4lhs0ra6i52" path="res://SpriteFrames/drip.gdshader" id="2_826wr"]
 [ext_resource type="Texture2D" uid="uid://bg5chfacni1wl" path="res://textures/picture_205f819f07ae4f1087c851d82914389f.png" id="2_ucygd"]
 [ext_resource type="Texture2D" uid="uid://bvk1rjoqm28jp" path="res://textures/game_logo.png" id="3_l72w3"]
+[ext_resource type="Shader" uid="uid://crira574vc51n" path="res://scenes/MainMenu.gdshader" id="3_mipys"]
 [ext_resource type="Theme" uid="uid://kxr4ib1d2k63" path="res://SpriteFrames/button_theme.tres" id="4_mipys"]
+[ext_resource type="Script" uid="uid://dig244ekbtgff" path="res://scenes/texture_rect.gd" id="6_8a8k8"]
 [ext_resource type="Script" uid="uid://divanfvreq42q" path="res://scripts/SettingsMenu.gd" id="6_ucygd"]
 [ext_resource type="AudioStream" uid="uid://bujkniwbbl2v7" path="res://music/01.ogg" id="7_ucygd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bhunq"]
+shader = ExtResource("3_mipys")
+shader_parameter/speed = 0.5
+shader_parameter/pulse_intensity = 0.15
+shader_parameter/alpha = 0.278000013205
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_biqin"]
 shader = ExtResource("2_826wr")
@@ -50,6 +58,15 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_ucygd")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=893268031]
+material = SubResource("ShaderMaterial_bhunq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=2045348144]
 layout_mode = 1
 anchors_preset = 15
@@ -72,10 +89,10 @@ grow_vertical = 2
 
 [node name="Block 1" type="CenterContainer" parent="." unique_id=1173434768]
 layout_mode = 1
-offset_left = -3.0
-offset_top = 84.0
-offset_right = 522.0
-offset_bottom = 352.0
+offset_left = -4.0
+offset_top = 39.0
+offset_right = 521.0
+offset_bottom = 307.0
 
 [node name="Menu" type="VBoxContainer" parent="Block 1" unique_id=1984997553]
 unique_name_in_owner = true
@@ -87,6 +104,7 @@ alignment = 1
 material = SubResource("ShaderMaterial_biqin")
 layout_mode = 2
 texture = ExtResource("3_l72w3")
+script = ExtResource("6_8a8k8")
 
 [node name="Drips" type="ColorRect" parent="." unique_id=349940314]
 material = SubResource("ShaderMaterial_drips")
