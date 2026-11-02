@@ -8,8 +8,8 @@ size = Vector2(14, 30)
 
 [node name="StaticBody2D" type="StaticBody2D" unique_id=1541013872 groups=["table"]]
 scale = Vector2(1.5, 1.5)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 8
+collision_mask = 8
 script = ExtResource("1_q8sqd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=48990849]
